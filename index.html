@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opatrovateľka.no - Nezisková organizácia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            line-height: 1;
+            zoom: 80%;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            position: relative;
+            min-height: 100vh;
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('logo.jpg');
+            background-size: 35%;
+            background-position: center 75%;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.18);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        section, header, footer {
+            display: block;
+            margin: 0;
+            padding: 0;
+            border: none;
+            line-height: 0;
+            vertical-align: top;
+        }
+
+        section > *, header > *, footer > * {
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 30px;
+            line-height: 1.6;
+        }
+
+        /* Header - UŽŠÍ S JAZYKMI V LIŠTE, BEZ TIEŇA */
+        header {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0;
+            position: relative;
+            height: 100%;
+        }
+
+        .logo-text {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text h1 {
+            font-size: 1.3em;
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+
+        /* Language Switcher - FIXED POSITION PRESNE AKO FLOATING PANEL, VERTIKÁLNE VYCENTROVANÉ */
+        .lang-switcher {
+            position: fixed;
+            right: 20px;
+            top: 30px;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 1001;
+        }
+
+        .lang-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.85em;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background: white;
+            color: #f39c12;
+        }
+
+        /* Sticky Navigation - UPRAVENÉ SCROLLOVANIE PRE SOCIÁLNE SIETE */
+        .sticky-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sticky-nav a {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+            text-align: center;
+            font-size: 1.1em;
+            white-space: nowrap;
+        }
+
+        .sticky-nav a:hover {
+            transform: translateX(-8px);
+            box-shadow: 0 6px 18px rgba(243, 156, 18, 0.6);
+        }
+
+        /* Hero Section - BEZ TRANSPARENCY A EŠTE UŽŠIA, TEXT VYCENTROVANÝ */
+        .hero {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero h2 {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.15em;
+            margin-bottom: 12px;
+            opacity: 0.95;
+            line-height: 1.4;
+        }
+
+        /* Services Section - CAROUSEL VERSION */
+        .services {
+            padding: 135px 0 50px 0;
+            background: rgba(255, 249, 230, 0.70);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            scroll-margin-top: 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #f39c12;
+            line-height: 1.2;
+            position: relative;
+            z-index: 20;
+        }
+
+        .contact .section-title {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: white;
+            line-height: 1.2;
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* CAROUSEL CONTAINER */
+        .services-carousel-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 2400px;
+            margin: 0 auto;
+            padding: 40px 0;
+            overflow: visible;
+        }
+
+        .services-carousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 880px;
+            perspective: 3000px;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            cursor: grab;
+        }
+
+        .carousel-track:active {
+            cursor: grabbing;
+        }
+
+        /* SERVICE CARDS IN CAROUSEL */
+        .service-card {
+            background: rgba(255, 255, 255, 0.82);
+            padding: 45px;
+            border-radius: 20px;
+            border: 4px solid #f39c12;
+            width: 680px;
+            min-height: 820px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: absolute;
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            backdrop-filter: blur(5px);
+            visibility: visible;
+        }
+
+        /* HIDDEN CARDS - Completely invisible */
+        .service-card.hidden {
+            opacity: 0;
+            transform: scale(0.3) translateX(0);
+            pointer-events: none;
+            z-index: 0;
+            visibility: hidden;
+        }
+
+        /* FAR LEFT CARD - Very transparent & smallest */
+        .service-card.far-left {
+            opacity: 0.15;
+            transform: scale(0.5) translateX(-1150px);
+            filter: blur(2px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* LEFT SIDE CARD - Transparent & smaller */
+        .service-card.left {
+            opacity: 0.3;
+            transform: scale(0.65) translateX(-710px);
+            filter: blur(1.5px);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* CENTER CARD - VÝRAZNE PRIEHĽADNÉ POZADIE, TEXT A OKRAJE OSTÁVAJÚ PLNE VIDITEĽNÉ */
+        .service-card.center {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.42);
+            transform: scale(1.05) translateX(0);
+            filter: blur(0);
+            z-index: 10;
+            box-shadow: 0 30px 80px rgba(243, 156, 18, 0.5);
+            border-width: 5px;
+        }
+
+        .service-card.center:hover {
+            transform: scale(1.08) translateY(-10px);
+            box-shadow: 0 35px 90px rgba(243, 156, 18, 0.6);
+        }
+
+        /* RIGHT SIDE CARD - Transparent & smaller */
+        .service-card.right {
+            opacity: 0.3;
+            transform: scale(0.65) translateX(710px);
+            filter: blur(1.5px);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* FAR RIGHT CARD - Very transparent & smallest */
+        .service-card.far-right {
+            opacity: 0.15;
+            transform: scale(0.5) translateX(1150px);
+            filter: blur(2px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .service-card h3 {
+            font-size: 1.4em;
+            color: #f39c12;
+            text-align: center;
+            line-height: 1.3;
+            width: 100%;
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 8px;
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .service-card ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            text-align: left;
+            min-height: 140px;
+            flex-grow: 0;
+        }
+
+        .service-card ul li {
+            margin: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .service-card ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #f39c12;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        /* CENTERED SERVICE CONTACT - for DOS and ADOS */
+        .service-contact {
+            margin: 0;
+            padding: 15px;
+            background: rgba(255, 220, 150, 0.42);
+            border-radius: 10px;
+            text-align: center;
+            width: 100%;
+            min-height: 95px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .service-contact strong {
+            color: #f39c12;
+            display: block;
+            margin-bottom: 5px;
+            line-height: 1.3;
+            font-size: 0.95em;
+        }
+
+        .service-contact p {
+            line-height: 1.3;
+            text-align: center;
+            font-size: 0.9em;
+            margin: 3px 0;
+        }
+
+        .service-contact a {
+            color: #333;
+            text-decoration: none;
+            border-bottom: 2px solid #f39c12;
+            transition: color 0.3s;
+            line-height: 1.4;
+            display: inline-block;
+        }
+
+        .service-contact a:hover {
+            color: #f39c12;
+        }
+
+        .service-contact a[href*="google.com/maps"]:hover {
+            color: #f39c12 !important;
+        }
+
+        .service-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 0;
+            width: 100%;
+            min-height: 40px;
+        }
+
+        .service-btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            text-align: center;
+            font-size: 0.9em;
+            line-height: 1.3;
+        }
+
+        .service-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        /* Service Gallery */
+        .service-gallery {
+            width: 100%;
+            height: 320px;
+            margin: 0;
+        }
+
+        .service-gallery-item {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 15px;
+            background: #f0f0f0;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .service-gallery-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .service-gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.4);
+        }
+
+        .gallery-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            font-size: 3.8em;
+        }
+
+        /* CAROUSEL NAVIGATION */
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-nav:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.6);
+        }
+
+        .carousel-nav.prev {
+            left: 20px;
+        }
+
+        .carousel-nav.next {
+            right: 20px;
+        }
+
+        /* CAROUSEL DOTS INDICATOR - FIXED AT BOTTOM WITH SMOOTH TRANSITIONS */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 59px;
+            z-index: 15;
+        }
+
+        .carousel-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(243, 156, 18, 0.3);
+            cursor: pointer;
+            transition: all 0.5s ease;
+            border: 2px solid transparent;
+        }
+
+        .carousel-dot.active {
+            background: #f39c12;
+            transform: scale(1.3);
+            border-color: #f39c12;
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.6);
+        }
+
+        .carousel-dot:hover {
+            background: #f39c12;
+            transform: scale(1.2);
+            transition: all 0.3s ease;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: white;
+            font-size: 50px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .lightbox-close:hover {
+            transform: scale(1.2);
+        }
+
+        /* Social Media Section */
+        .social-media {
+            padding: 70px 0;
+            background: rgba(255, 249, 230, 0.70);
+            position: relative;
+            z-index: 10;
+            scroll-margin-top: 100px;
+        }
+
+        .social-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 900px;
+            margin: 40px auto 0;
+            justify-items: center;
+        }
+
+        .social-card {
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.82);
+            border-radius: 20px;
+            border: 3px solid #f39c12;
+            transition: transform 0.3s;
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            backdrop-filter: blur(5px);
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
+        }
+
+        .social-card h3 {
+            color: #f39c12;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .social-button {
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .instagram-button {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        .facebook-button {
+            background: linear-gradient(135deg, #4267B2 0%, #2851A3 100%);
+        }
+
+        .social-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Contact Section - ZAROVNANÉ ČIARY A TELEFÓNNE ČÍSLA */
+        .contact {
+            padding: 50px 0;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            position: relative;
+            z-index: 10;
+            scroll-margin-top: 80px;
+            text-align: center;
+        }
+
+        .contact-info {
+            max-width: 800px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .contact-info h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            padding-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .contact-item {
+            margin: 15px 0;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .contact-item strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            transition: border-color 0.3s;
+        }
+
+        .contact-item a:hover {
+            border-color: white;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            justify-items: center;
+            align-items: stretch;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 30px 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s;
+            width: 100%;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            line-height: 1.3;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .contact-card-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .contact-card p {
+            line-height: 1.6;
+            text-align: center;
+            margin: 5px 0;
+        }
+
+        .contact-card-phone {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .contact-card-phone p {
+            font-size: 1.2em;
+            line-height: 1.4;
+        }
+
+        .contact-card a {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            transition: border-color 0.3s;
+        }
+
+        .contact-card a:hover {
+            border-color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            position: relative;
+            z-index: 100;
+        }
+
+        footer p {
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1600px) {
+            .service-card {
+                width: 480px;
+            }
+
+            .service-card.left {
+                transform: scale(0.65) translateX(-510px);
+            }
+
+            .service-card.right {
+                transform: scale(0.65) translateX(510px);
+            }
+
+            .service-card.far-left {
+                transform: scale(0.5) translateX(-820px);
+            }
+
+            .service-card.far-right {
+                transform: scale(0.5) translateX(820px);
+            }
+        }
+
+        @media (max-width: 1400px) {
+            .service-card {
+                width: 450px;
+            }
+
+            .service-card.left {
+                transform: scale(0.65) translateX(-480px);
+            }
+
+            .service-card.right {
+                transform: scale(0.65) translateX(480px);
+            }
+
+            .service-card.far-left {
+                transform: scale(0.5) translateX(-770px);
+            }
+
+            .service-card.far-right {
+                transform: scale(0.5) translateX(770px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            .logo-text h1 {
+                font-size: 1.1em;
+            }
+
+            .header-content {
+                padding: 0 15px;
+            }
+
+            .lang-switcher {
+                right: 10px;
+                gap: 6px;
+            }
+
+            .lang-btn {
+                padding: 5px 10px;
+                font-size: 0.8em;
+            }
+
+            .sticky-nav {
+                display: none;
+            }
+
+            .services {
+                padding: 50px 0 80px 0;
+            }
+
+            .section-title {
+                font-size: 2em;
+                margin-bottom: 40px;
+            }
+
+            .services-carousel {
+                min-height: 650px;
+            }
+
+            .service-card {
+                width: 300px;
+                min-height: 650px;
+                padding: 25px;
+            }
+
+            .service-card h3 {
+                font-size: 1.2em;
+                min-height: 70px;
+                padding: 10px;
+            }
+
+            .service-card ul {
+                min-height: 180px;
+            }
+
+            .service-card ul li {
+                font-size: 0.9em;
+                margin: 10px 0;
+                padding-left: 25px;
+            }
+
+            .service-contact {
+                min-height: 115px;
+                padding: 15px;
+            }
+
+            .service-contact strong {
+                font-size: 0.95em;
+            }
+
+            .service-contact p {
+                font-size: 0.85em;
+            }
+
+            .service-buttons {
+                min-height: 50px;
+                gap: 10px;
+            }
+
+            .service-btn {
+                font-size: 0.85em;
+                padding: 12px 20px;
+            }
+
+            .service-gallery {
+                height: 150px;
+            }
+
+            .gallery-placeholder {
+                font-size: 3em;
+            }
+
+            .service-card.center {
+                transform: scale(1) translateX(0);
+            }
+
+            .service-card.left {
+                transform: scale(0.65) translateX(-280px);
+                opacity: 0.25;
+            }
+
+            .service-card.right {
+                transform: scale(0.65) translateX(280px);
+                opacity: 0.25;
+            }
+
+            .service-card.far-left,
+            .service-card.far-right {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            .carousel-nav {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+
+            .carousel-nav.prev {
+                left: 10px;
+            }
+
+            .carousel-nav.next {
+                right: 10px;
+            }
+
+            .carousel-dots {
+                gap: 12px;
+                margin-top: 40px;
+            }
+
+            .carousel-dot {
+                width: 12px;
+                height: 12px;
+            }
+
+            .social-container {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-card {
+                width: 260px;
+                min-height: 600px;
+            }
+
+            .service-card.left {
+                transform: scale(0.5) translateX(-200px);
+                opacity: 0.2;
+            }
+
+            .service-card.right {
+                transform: scale(0.5) translateX(200px);
+                opacity: 0.2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-text">
+                <h1 data-sk="Nezisková organizácia Opatrovateľka" data-en="Non-profit organization Opatrovateľka" data-de="Gemeinnützige Organisation Opatrovateľka">Nezisková organizácia Opatrovateľka</h1>
+            </div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="switchLanguage('sk')">SK</button>
+                <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
+                <button class="lang-btn" onclick="switchLanguage('de')">DE</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sticky Navigation -->
+    <div class="sticky-nav">
+        <a href="#services" data-sk="📋 Služby" data-en="📋 Services" data-de="📋 Dienstleistungen">📋 Služby</a>
+        <a href="#social" data-sk="📱 Sociálne siete" data-en="📱 Social Media" data-de="📱 Soziale Medien">📱 Sociálne siete</a>
+        <a href="#contact" data-sk="📞 Kontakt" data-en="📞 Contact" data-de="📞 Kontakt">📞 Kontakt</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2 data-sk="Profesionálna starostlivosť s láskou" data-en="Professional care with love" data-de="Professionelle Pflege mit Liebe">Profesionálna starostlivosť s láskou</h2>
+            <p data-sk="Podávame Vám pomocnú ruku pri starostlivosti o Vás a Vašich blízkych" data-en="We offer you a helping hand in caring for you and your loved ones" data-de="Wir bieten Ihnen eine helfende Hand bei der Pflege von Ihnen und Ihren Lieben">Podávame Vám pomocnú ruku pri starostlivosti o Vás a Vašich blízkych</p>
+        </div>
+    </section>
+
+    <!-- Services Section - CAROUSEL -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title" data-sk="Naše Služby" data-en="Our Services" data-de="Unsere Dienstleistungen">Naše Služby</h2>
+            
+            <div class="services-carousel-wrapper">
+                <div class="services-carousel">
+                    <button class="carousel-nav prev" onclick="prevSlide()">‹</button>
+                    
+                    <div class="carousel-track" id="carouselTrack">
+                        <!-- ZOS Pobytová forma -->
+                        <div class="service-card">
+                            <h3 data-sk="Zariadenie opatrovateľskej služby SLNKO" data-en="SLNKO Care Facility" data-de="SLNKO Pflegeeinrichtung">Zariadenie opatrovateľskej služby SLNKO</h3>
+                            <p style="text-align: center; margin: 0 0 15px 0; font-size: 0.95em;">
+                                <a href="https://www.google.com/maps?q=Čsl.+tankistov+7076/83,+841+06+Bratislava+-+Záhorská+Bystrica" target="_blank" style="color: #666; text-decoration: none; border-bottom: 2px solid #f39c12; transition: color 0.3s;">
+                                    <span style="color: #f39c12; margin-right: 4px;">📍</span><span data-sk="Čsl. tankistov 7076/83, 841 06 Bratislava - Záhorská Bystrica" data-en="Čsl. tankistov 7076/83, 841 06 Bratislava - Záhorská Bystrica" data-de="Čsl. tankistov 7076/83, 841 06 Bratislava - Záhorská Bystrica">Čsl. tankistov 7076/83, 841 06 Bratislava - Záhorská Bystrica</span>
+                                </a>
+                            </p>
+                            <ul>
+                                <li data-sk="Celoročná pobytová forma" data-en="Year-round residential care" data-de="Ganzjährige Wohnpflege">Celoročná pobytová forma</li>
+                                <li data-sk="Nízko kapacitné zariadenie rodinného typu" data-en="Low-capacity family-type facility" data-de="Familienähnliche Einrichtung mit niedriger Kapazität">Nízko kapacitné zariadenie rodinného typu</li>
+                                <li data-sk="24-hodinová opatrovateľská starostlivosť" data-en="24-hour care service" data-de="24-Stunden-Pflegedienst">24-hodinová opatrovateľská starostlivosť</li>
+                                <li data-sk="Ošetrovateľská starostlivosť" data-en="Nursing care" data-de="Krankenpflege">Ošetrovateľská starostlivosť</li>
+                            </ul>
+                            
+                            <div class="service-contact">
+                                <strong data-sk="Bližšie informácie:" data-en="More information:" data-de="Weitere Informationen:">Bližšie informácie:</strong>
+                                <p><a href="tel:+421948378648">+421 948 378 648</a></p>
+                                <p><a href="mailto:opatrovatelka.no@gmail.com">opatrovatelka.no@gmail.com</a></p>
+                            </div>
+
+                            <div class="service-gallery">
+                                <div class="service-gallery-item" onclick="openLightbox('zos-slnko.png')">
+                                    <img src="zos-slnko.png" alt="ZOS SLNKO" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'>🏥</div>'">
+                                </div>
+                            </div>
+
+                            <div class="service-buttons">
+                                <a href="cennik-zos-slnko.pdf" download class="service-btn">
+                                    <span data-sk="📄 Cenník ZOS" data-en="📄 ZOS Price List" data-de="📄 ZOS Preisliste">📄 Cenník ZOS</span>
+                                </a>
+                                <a href="ziadost-zos-slnko.pdf" download class="service-btn">
+                                    <span data-sk="📝 Žiadosť (ZOS)" data-en="📝 Application (ZOS)" data-de="📝 Antrag (ZOS)">📝 Žiadosť (ZOS)</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- ZOS Ambulantná forma -->
+                        <div class="service-card">
+                            <h3 data-sk="Zariadenie opatrovateľskej služby - ambulantná forma" data-en="Care Facility - Outpatient Form" data-de="Pflegeeinrichtung - Ambulante Form">Zariadenie opatrovateľskej služby - ambulantná forma</h3>
+                            <ul>
+                                <li data-sk="8-hodinová opatrovateľská starostlivosť" data-en="8-hour care service" data-de="8-Stunden-Pflegedienst">8-hodinová opatrovateľská starostlivosť</li>
+                                <li data-sk="V pracovné dni 7:30 do 15:30" data-en="Weekdays 7:30 to 15:30" data-de="Wochentags 7:30 bis 15:30">V pracovné dni 7:30 do 15:30</li>
+                            </ul>
+                            
+                            <div class="service-contact">
+                                <strong data-sk="Bližšie informácie:" data-en="More information:" data-de="Weitere Informationen:">Bližšie informácie:</strong>
+                                <p><a href="tel:+421948378648">+421 948 378 648</a></p>
+                                <p><a href="mailto:opatrovatelka.no@gmail.com">opatrovatelka.no@gmail.com</a></p>
+                            </div>
+
+                            <div class="service-gallery">
+                                <div class="service-gallery-item" onclick="openLightbox('zos-ambulant.png')">
+                                    <img src="zos-ambulant.png" alt="ZOS Ambulantná" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'>⏰</div>'">
+                                </div>
+                            </div>
+
+                            <div class="service-buttons">
+                                <a href="cennik-zos-slnko.pdf" download class="service-btn">
+                                    <span data-sk="📄 Cenník ZOS" data-en="📄 ZOS Price List" data-de="📄 ZOS Preisliste">📄 Cenník ZOS</span>
+                                </a>
+                                <a href="ziadost-zos-ambulant.pdf" download class="service-btn">
+                                    <span data-sk="📝 Žiadosť (ZOS A)" data-en="📝 Application (ZOS A)" data-de="📝 Antrag (ZOS A)">📝 Žiadosť (ZOS A)</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- DOS - NO PHOTO -->
+                        <div class="service-card">
+                            <h3 data-sk="Domáca opatrovateľská služba" data-en="Home Care Service" data-de="Häuslicher Pflegedienst">Domáca opatrovateľská služba</h3>
+                            <ul>
+                                <li data-sk="Opatrovanie v domácnosti klienta" data-en="Care at client's home" data-de="Pflege im Haushalt des Klienten">Opatrovanie v domácnosti klienta</li>
+                                <li data-sk="Minimálne 8 hodín denne počas pracovných dní" data-en="Minimum 8 hours daily during weekdays" data-de="Mindestens 8 Stunden täglich an Werktagen">Minimálne 8 hodín denne počas pracovných dní</li>
+                                <li data-sk="Možné dohodnúť aj opatrovanie cez víkend a sviatok" data-en="Care during weekends and holidays available" data-de="Pflege am Wochenende und an Feiertagen möglich">Možné dohodnúť aj opatrovanie cez víkend a sviatok</li>
+                                <li data-sk="Čas opatrovania prispôsobený Vašim potrebám" data-en="Care time adapted to your needs" data-de="Pflegezeit an Ihre Bedürfnisse angepasst">Čas opatrovania prispôsobený Vašim potrebám</li>
+                            </ul>
+                            
+                            <div class="service-contact">
+                                <strong data-sk="Bližšie informácie:" data-en="More information:" data-de="Weitere Informationen:">Bližšie informácie:</strong>
+                                <p><a href="tel:+421948378648">+421 948 378 648</a></p>
+                                <p><a href="mailto:opatrovatelka.no@gmail.com">opatrovatelka.no@gmail.com</a></p>
+                            </div>
+
+                            <div class="service-buttons">
+                                <a href="cennik-dos.pdf" download class="service-btn">
+                                    <span data-sk="📄 Cenník DOS" data-en="📄 DOS Price List" data-de="📄 DOS Preisliste">📄 Cenník DOS</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- For Hendicap -->
+                        <div class="service-card">
+                            <h3>For Hendicap</h3>
+                            <ul>
+                                <li data-sk="Preprava imobilných a ťažko zdravotne postihnutých osôb" data-en="Transport of immobile and severely disabled persons" data-de="Transport von immobilen und schwerbehinderten Personen">Preprava imobilných a ťažko zdravotne postihnutých osôb</li>
+                                <li data-sk="Bezbariérová preprava špeciálne upravenými autami s plošinou" data-en="Barrier-free transport with specially adapted vehicles with lift" data-de="Barrierefreier Transport mit speziell angepassten Fahrzeugen mit Hebebühne">Bezbariérová preprava špeciálne upravenými autami s plošinou</li>
+                                <li data-sk="Odvezieme Vás kamkoľvek podľa Vašich potrieb (k lekárovi, do divadla, na oslavu, na letisko...)" data-en="We'll take you anywhere according to your needs (to doctor, theater, celebration, airport...)" data-de="Wir bringen Sie überall hin, je nach Ihren Bedürfnissen (zum Arzt, ins Theater, zur Feier, zum Flughafen...)">Odvezieme Vás kamkoľvek podľa Vašich potrieb (k lekárovi, do divadla, na oslavu, na letisko...)</li>
+                                <li data-sk="Prevozy realizujeme v rámci Bratislavy ale aj mimo Bratislavy, po celom Slovensku, aj do zahraničia" data-en="Transport within Bratislava and beyond, throughout Slovakia and abroad" data-de="Transport innerhalb von Bratislava und darüber hinaus, in der ganzen Slowakei und im Ausland">Prevozy realizujeme v rámci Bratislavy ale aj mimo Bratislavy, po celom Slovensku, aj do zahraničia</li>
+                            </ul>
+                            
+                            <div class="service-contact">
+                                <strong data-sk="Bližšie informácie a objednávky telefonicky:" data-en="More information and orders by phone:" data-de="Weitere Informationen und Bestellungen telefonisch:">Bližšie informácie a objednávky telefonicky:</strong>
+                                <p><a href="tel:+421948502177">+421 948 502 177</a></p>
+                            </div>
+
+                            <div class="service-gallery">
+                                <div class="service-gallery-item" onclick="openLightbox('preprava.png')">
+                                    <img src="preprava.png" alt="Preprava" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'>🚐</div>'">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ADOS - NO PHOTO -->
+                        <div class="service-card">
+                            <h3 data-sk="ADOS - Agentúra domácej ošetrovateľskej starostlivosti" data-en="ADOS - Home Nursing Care Agency" data-de="ADOS - Häusliche Krankenpflege Agentur">ADOS - Agentúra domácej ošetrovateľskej starostlivosti</h3>
+                            <ul>
+                                <li data-sk="Ošetrovanie priamo v domácnosti klienta" data-en="Nursing directly at client's home" data-de="Pflege direkt im Haushalt des Klienten">Ošetrovanie priamo v domácnosti klienta</li>
+                                <li data-sk="Odber krvi" data-en="Blood sampling" data-de="Blutabnahme">Odber krvi</li>
+                                <li data-sk="Ošetrovanie rán a dekubitov" data-en="Wound and bedsore care" data-de="Wund- und Dekubituspflege">Ošetrovanie rán a dekubitov</li>
+                                <li data-sk="Podávanie injekcií a infúzií" data-en="Administration of injections and infusions" data-de="Verabreichung von Injektionen und Infusionen">Podávanie injekcií a infúzií</li>
+                            </ul>
+                            
+                            <div class="service-contact">
+                                <strong data-sk="Bližšie informácie:" data-en="More information:" data-de="Weitere Informationen:">Bližšie informácie:</strong>
+                                <p><a href="tel:+421905530428">+421 905 530 428</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="carousel-nav next" onclick="nextSlide()">›</button>
+                </div>
+
+                <!-- Carousel Dots -->
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="Fotka">
+    </div>
+
+    <!-- Social Media Section -->
+    <section class="social-media" id="social">
+        <div class="container">
+            <h2 class="section-title" data-sk="Sledujte Nás" data-en="Follow Us" data-de="Folgen Sie Uns">Sledujte Nás</h2>
+            <div class="social-container">
+                <div class="social-card">
+                    <h3 data-sk="Instagram" data-en="Instagram" data-de="Instagram">Instagram</h3>
+                    <a href="https://www.instagram.com/opatrovatelka.no/" target="_blank" class="social-button instagram-button">
+                        <span style="font-size: 1.5em;">📸</span>
+                        <span data-sk="@opatrovatelka.no" data-en="@opatrovatelka.no" data-de="@opatrovatelka.no">@opatrovatelka.no</span>
+                    </a>
+                </div>
+
+                <div class="social-card">
+                    <h3 data-sk="Facebook" data-en="Facebook" data-de="Facebook">Facebook</h3>
+                    <a href="https://www.facebook.com/share/19qUNHXzcJ/" target="_blank" class="social-button facebook-button">
+                        <span style="font-size: 1.5em;">👍</span>
+                        <span data-sk="Opatrovateľka.no" data-en="Opatrovateľka.no" data-de="Opatrovateľka.no">Opatrovateľka.no</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title" data-sk="Kontaktujte Nás" data-en="Contact Us" data-de="Kontaktieren Sie Uns">Kontaktujte Nás</h2>
+            
+            <div class="contact-info">
+                <h3 data-sk="Nezisková organizácia opatrovateľka" data-en="Non-profit organization opatrovateľka" data-de="Gemeinnützige Organisation opatrovateľka">Nezisková organizácia opatrovateľka</h3>
+                <div class="contact-item">
+                    <strong data-sk="📍 Adresa:" data-en="📍 Address:" data-de="📍 Adresse:">📍 Adresa:</strong>
+                    <p>Tatranská 7252/34<br>841 06 Bratislava</p>
+                </div>
+                <div class="contact-item">
+                    <strong data-sk="🏢 Identifikačné údaje:" data-en="🏢 Identification:" data-de="🏢 Identifikation:">🏢 Identifikačné údaje:</strong>
+                    <p>IČO: 42 166 691<br>DIČ: 2022908514</p>
+                </div>
+                <div class="contact-item">
+                    <strong data-sk="📧 Email:" data-en="📧 Email:" data-de="📧 E-Mail:">📧 Email:</strong>
+                    <p><a href="mailto:opatrovatelka.no@gmail.com">opatrovatelka.no@gmail.com</a></p>
+                </div>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h4 data-sk="Opatrovateľské služby" data-en="Care Services" data-de="Pflegedienste">Opatrovateľské služby</h4>
+                    <div class="contact-card-content">
+                        <p data-sk="Pobytová forma<br>Ambulantná forma" data-en="Residential care<br>Outpatient care" data-de="Wohnpflege<br>Ambulante Pflege">Pobytová forma<br>Ambulantná forma</p>
+                    </div>
+                    <div class="contact-card-phone">
+                        <p><a href="tel:+421948378648">+421 948 378 648</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <h4>For Hendicap</h4>
+                    <div class="contact-card-content">
+                        <p data-sk="Preprava ŤZP osôb" data-en="Disabled persons transport" data-de="Behindertentransport">Preprava ŤZP osôb</p>
+                    </div>
+                    <div class="contact-card-phone">
+                        <p><a href="tel:+421948502177">+421 948 502 177</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <h4>ADOS</h4>
+                    <div class="contact-card-content">
+                        <p data-sk="Ošetrovateľské výkony" data-en="Nursing procedures" data-de="Pflegeleistungen">Ošetrovateľské výkony</p>
+                    </div>
+                    <div class="contact-card-phone">
+                        <p><a href="tel:+421905530428">+421 905 530 428</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Opatrovateľka.no - <span data-sk="Všetky práva vyhradené" data-en="All rights reserved" data-de="Alle Rechte vorbehalten">Všetky práva vyhradené</span></p>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const cards = document.querySelectorAll('.service-card');
+        const totalSlides = cards.length;
+        let isTransitioning = false;
+
+        // Swipe/Drag variables
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+        const swipeThreshold = 50;
+
+        // Initialize carousel
+        function initCarousel() {
+            // Ensure page starts at the very top
+            window.scrollTo(0, 0);
+            
+            updateCarousel();
+            createDots();
+            
+            // Add swipe/drag listeners
+            const carouselTrack = document.getElementById('carouselTrack');
+            
+            // Touch events (mobile)
+            carouselTrack.addEventListener('touchstart', handleDragStart, { passive: true });
+            carouselTrack.addEventListener('touchmove', handleDragMove, { passive: true });
+            carouselTrack.addEventListener('touchend', handleDragEnd);
+            
+            // Mouse events (desktop)
+            carouselTrack.addEventListener('mousedown', handleDragStart);
+            carouselTrack.addEventListener('mousemove', handleDragMove);
+            carouselTrack.addEventListener('mouseup', handleDragEnd);
+            carouselTrack.addEventListener('mouseleave', handleDragEnd);
+            
+            // Prevent text selection during drag
+            carouselTrack.addEventListener('dragstart', (e) => e.preventDefault());
+            
+            // AUTO-SCROLL WITH USER ACTIVITY DETECTION BEFORE START
+            let userInteractedBeforeScroll = false;
+            
+            // Detect any user activity before auto-scroll starts
+            function markUserActivity() {
+                userInteractedBeforeScroll = true;
+            }
+            
+            // Add listeners for user activity
+            window.addEventListener('wheel', markUserActivity, { passive: true, once: true });
+            window.addEventListener('touchstart', markUserActivity, { passive: true, once: true });
+            window.addEventListener('keydown', markUserActivity, { once: true });
+            window.addEventListener('mousedown', markUserActivity, { once: true });
+            window.addEventListener('scroll', markUserActivity, { passive: true, once: true });
+            
+            // Wait 2 seconds, then check if user was active
+            setTimeout(() => {
+                if (!userInteractedBeforeScroll) {
+                    slowScrollToServices();
+                }
+                // Clean up - remove the listeners after timeout
+                window.removeEventListener('wheel', markUserActivity);
+                window.removeEventListener('touchstart', markUserActivity);
+                window.removeEventListener('keydown', markUserActivity);
+                window.removeEventListener('mousedown', markUserActivity);
+                window.removeEventListener('scroll', markUserActivity);
+            }, 2000); // Wait 2 seconds so user can see hero
+        }
+
+        // Handle drag/swipe start
+        function handleDragStart(e) {
+            if (isTransitioning) return;
+            isDragging = true;
+            startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+            currentX = startX;
+        }
+
+        // Handle drag/swipe move
+        function handleDragMove(e) {
+            if (!isDragging) return;
+            currentX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+        }
+
+        // Handle drag/swipe end
+        function handleDragEnd(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const diff = startX - currentX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swiped left - go to next slide
+                    nextSlide();
+                } else {
+                    // Swiped right - go to previous slide
+                    prevSlide();
+                }
+            }
+        }
+
+        // Moderate speed smooth scroll to services section on page load with user input detection
+        function slowScrollToServices() {
+            const servicesTitle = document.querySelector('.services .section-title');
+            const headerHeight = 60; // Header height
+            const gapBelowHeader = 10; // Small gap between header and title
+            const elementPosition = servicesTitle.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerHeight - gapBelowHeader;
+            const startPosition = window.pageYOffset;
+            const distance = offsetPosition - startPosition;
+            const duration = 1000; // 1 second - faster animation
+            let start = null;
+            let canceled = false;
+
+            // Cancel auto-scroll if user interacts
+            function cancelScroll() {
+                canceled = true;
+                // Remove all listeners
+                window.removeEventListener('wheel', cancelScroll);
+                window.removeEventListener('touchstart', cancelScroll);
+                window.removeEventListener('keydown', cancelScroll);
+                window.removeEventListener('mousedown', cancelScroll);
+            }
+
+            // Add event listeners for user input
+            window.addEventListener('wheel', cancelScroll, { passive: true });
+            window.addEventListener('touchstart', cancelScroll, { passive: true });
+            window.addEventListener('keydown', cancelScroll);
+            window.addEventListener('mousedown', cancelScroll);
+
+            function animation(currentTime) {
+                if (canceled) return; // Stop if user interacted
+                if (start === null) start = currentTime;
+                const timeElapsed = currentTime - start;
+                const run = ease(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration && !canceled) {
+                    requestAnimationFrame(animation);
+                } else {
+                    // Remove listeners after animation completes
+                    cancelScroll();
+                }
+            }
+
+            function ease(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t + b;
+                t--;
+                return -c / 2 * (t * (t - 2) - 1) + b;
+            }
+
+            requestAnimationFrame(animation);
+        }
+
+        // Smooth scroll to services section on page load
+        function smoothScrollToServices() {
+            const servicesSection = document.getElementById('services');
+            const headerOffset = 80;
+            const elementPosition = servicesSection.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+
+        // Create dots indicator
+        function createDots() {
+            const dotsContainer = document.getElementById('carouselDots');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'carousel-dot';
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Update carousel view
+        function updateCarousel() {
+            // Nastavíme flag že prebieha transakcia
+            isTransitioning = true;
+            
+            cards.forEach((card, index) => {
+                // Remove all classes
+                card.classList.remove('center', 'left', 'right', 'far-left', 'far-right', 'hidden');
+                
+                // Calculate position relative to current slide
+                let position = index - currentSlide;
+                
+                // Handle wrap-around for infinite loop
+                if (position < -Math.floor(totalSlides / 2)) {
+                    position += totalSlides;
+                } else if (position > Math.floor(totalSlides / 2)) {
+                    position -= totalSlides;
+                }
+                
+                // Assign classes based on position
+                if (position === 0) {
+                    card.classList.add('center');
+                } else if (position === -1) {
+                    card.classList.add('left');
+                } else if (position === -2) {
+                    card.classList.add('far-left');
+                } else if (position === 1) {
+                    card.classList.add('right');
+                } else if (position === 2) {
+                    card.classList.add('far-right');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Update dots with smooth transition
+            const dots = document.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+
+            // Po 700ms (dĺžka transition) povolíme ďalšiu transakciu
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 700);
+        }
+
+        // Navigation functions
+        function nextSlide() {
+            if (isTransitioning) return;
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            if (isTransitioning) return;
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            if (isTransitioning) return;
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        // Auto-advance carousel
+        let autoAdvance = setInterval(nextSlide, 5000);
+
+        // Pause auto-advance on hover
+        document.querySelector('.services-carousel').addEventListener('mouseenter', () => {
+            clearInterval(autoAdvance);
+        });
+
+        document.querySelector('.services-carousel').addEventListener('mouseleave', () => {
+            autoAdvance = setInterval(nextSlide, 5000);
+        });
+
+        // Language switcher
+        function switchLanguage(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+                element.innerHTML = element.getAttribute('data-' + lang);
+            });
+
+            document.documentElement.lang = lang;
+        }
+
+        // Lightbox functions
+        function openLightbox(imageSrc) {
+            document.getElementById('lightbox').classList.add('active');
+            document.getElementById('lightbox-img').src = imageSrc;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            }
+        });
+
+        // Smooth scroll - UPRAVENÉ PRE LEPŠIE CENTROVANIE
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                
+                if (target) {
+                    let offsetPosition;
+                    
+                    if (targetId === '#services') {
+                        // Pre služby používame rovnaký offset ako auto-scroll
+                        const servicesTitle = document.querySelector('.services .section-title');
+                        const headerHeight = 60;
+                        const gapBelowHeader = 10;
+                        const elementPosition = servicesTitle.getBoundingClientRect().top;
+                        offsetPosition = elementPosition + window.pageYOffset - headerHeight - gapBelowHeader;
+                    } else if (targetId === '#social') {
+                        // Pre sociálne siete posunieme optimálne
+                        const elementPosition = target.getBoundingClientRect().top;
+                        offsetPosition = elementPosition + window.pageYOffset - 150;
+                    } else {
+                        // Pre ostatné sekcie štandardný offset
+                        const headerOffset = 80;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    }
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', initCarousel);
+    </script>
+</body>
+</html>
