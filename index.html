@@ -13,7 +13,13 @@
 
         html {
             line-height: 1;
-            zoom: 80%;
+        }
+        
+        /* Zoom iba pre desktop */
+        @media (min-width: 1024px) {
+            html {
+                zoom: 80%;
+            }
         }
 
         body {
@@ -81,7 +87,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            height: 60px;
+            min-height: 60px;
         }
 
         .header-content {
@@ -92,9 +98,8 @@
             gap: 15px;
             max-width: 1600px;
             margin: 0 auto;
-            padding: 0;
+            padding: 0 15px;
             position: relative;
-            height: 100%;
         }
 
         .logo-text {
@@ -884,32 +889,71 @@
                 transform: scale(0.5) translateX(770px);
             }
         }
+        
+        @media (min-width: 769px) and (max-width: 1023px) {
+            .service-card {
+                width: 400px;
+                min-height: 750px;
+            }
+            
+            .service-card.left {
+                transform: scale(0.7) translateX(-420px);
+            }
+
+            .service-card.right {
+                transform: scale(0.7) translateX(420px);
+            }
+            
+            .service-card.far-left {
+                transform: scale(0.55) translateX(-680px);
+            }
+
+            .service-card.far-right {
+                transform: scale(0.55) translateX(680px);
+            }
+            
+            .sticky-nav {
+                display: flex;
+            }
+            
+            .lang-switcher {
+                position: fixed;
+                right: 20px;
+                top: 30px;
+            }
+        }
 
         @media (max-width: 768px) {
             .hero h2 {
-                font-size: 2em;
-            }
-
-            .hero p {
-                font-size: 1.1em;
-            }
-
-            .logo-text h1 {
-                font-size: 1.1em;
-            }
-
-            .header-content {
+                font-size: 1.8em;
                 padding: 0 15px;
             }
 
+            .hero p {
+                font-size: 1.05em;
+                padding: 0 15px;
+            }
+
+            .logo-text h1 {
+                font-size: 1em;
+                text-align: center;
+            }
+
+            .header-content {
+                flex-direction: column;
+                padding: 10px 15px;
+                gap: 10px;
+            }
+
             .lang-switcher {
-                right: 10px;
-                gap: 6px;
+                position: static;
+                transform: none;
+                margin: 0 auto;
             }
 
             .lang-btn {
-                padding: 5px 10px;
-                font-size: 0.8em;
+                padding: 8px 16px;
+                font-size: 0.9em;
             }
 
             .sticky-nav {
@@ -922,60 +966,60 @@
 
             .section-title {
                 font-size: 2em;
-                margin-bottom: 40px;
+                margin-bottom: 30px;
             }
 
             .services-carousel {
-                min-height: 650px;
+                min-height: 750px;
             }
 
             .service-card {
-                width: 300px;
-                min-height: 650px;
-                padding: 25px;
+                width: 340px;
+                min-height: 700px;
+                padding: 30px;
             }
 
             .service-card h3 {
-                font-size: 1.2em;
-                min-height: 70px;
+                font-size: 1.3em;
+                min-height: 80px;
                 padding: 10px;
             }
 
             .service-card ul {
-                min-height: 180px;
+                min-height: 200px;
             }
 
             .service-card ul li {
-                font-size: 0.9em;
+                font-size: 0.95em;
                 margin: 10px 0;
-                padding-left: 25px;
+                padding-left: 28px;
             }
 
             .service-contact {
-                min-height: 115px;
-                padding: 15px;
+                min-height: 120px;
+                padding: 18px;
             }
 
             .service-contact strong {
-                font-size: 0.95em;
+                font-size: 1em;
             }
 
             .service-contact p {
-                font-size: 0.85em;
+                font-size: 0.9em;
             }
 
             .service-buttons {
-                min-height: 50px;
+                min-height: 55px;
                 gap: 10px;
             }
 
             .service-btn {
-                font-size: 0.85em;
-                padding: 12px 20px;
+                font-size: 0.9em;
+                padding: 12px 22px;
             }
 
             .service-gallery {
-                height: 150px;
+                height: 180px;
             }
 
             .gallery-placeholder {
@@ -987,13 +1031,13 @@
             }
 
             .service-card.left {
-                transform: scale(0.65) translateX(-280px);
-                opacity: 0.25;
+                transform: scale(0.7) translateX(-310px);
+                opacity: 0.3;
             }
 
             .service-card.right {
-                transform: scale(0.65) translateX(280px);
-                opacity: 0.25;
+                transform: scale(0.7) translateX(310px);
+                opacity: 0.3;
             }
 
             .service-card.far-left,
@@ -1003,52 +1047,95 @@
             }
 
             .carousel-nav {
-                width: 50px;
-                height: 50px;
-                font-size: 22px;
+                width: 55px;
+                height: 55px;
+                font-size: 26px;
             }
 
             .carousel-nav.prev {
-                left: 10px;
+                left: 5px;
             }
 
             .carousel-nav.next {
-                right: 10px;
+                right: 5px;
             }
 
             .carousel-dots {
-                gap: 12px;
-                margin-top: 40px;
+                gap: 14px;
+                margin-top: 50px;
             }
 
             .carousel-dot {
-                width: 12px;
-                height: 12px;
+                width: 13px;
+                height: 13px;
             }
 
             .social-container {
                 grid-template-columns: 1fr;
+                padding: 0 20px;
+            }
+            
+            .social-card {
+                max-width: 100%;
             }
 
             .contact-grid {
                 grid-template-columns: 1fr;
+                padding: 0 20px;
+            }
+            
+            .contact-card {
+                max-width: 100%;
+            }
+            
+            .contact-info {
+                margin: 20px 15px;
+                padding: 25px 20px;
             }
         }
 
         @media (max-width: 480px) {
+            .logo-text h1 {
+                font-size: 0.9em;
+            }
+            
+            .hero h2 {
+                font-size: 1.6em;
+            }
+            
+            .hero p {
+                font-size: 1em;
+            }
+            
             .service-card {
-                width: 260px;
-                min-height: 600px;
+                width: 300px;
+                min-height: 680px;
+                padding: 25px;
+            }
+            
+            .service-card h3 {
+                font-size: 1.2em;
+                min-height: 75px;
             }
 
             .service-card.left {
-                transform: scale(0.5) translateX(-200px);
+                transform: scale(0.6) translateX(-240px);
                 opacity: 0.2;
             }
 
             .service-card.right {
-                transform: scale(0.5) translateX(200px);
+                transform: scale(0.6) translateX(240px);
                 opacity: 0.2;
+            }
+            
+            .carousel-nav {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .section-title {
+                font-size: 1.8em;
             }
         }
     </style>
