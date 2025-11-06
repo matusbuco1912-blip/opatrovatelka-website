@@ -925,20 +925,22 @@
 
         /* ========== MOBILE FIXES ONLY - DESKTOP UNTOUCHED ========== */
         @media (max-width: 768px) {
-            /* FIX 1: Biela lista vpravo - horizontal overflow */
-            body { 
+            /* FIX 1: Kompletne zabránit horizontálnemu scrollu */
+            html, body { 
                 overflow-x: hidden !important;
-                max-width: 100vw;
-            }
-
-            * {
-                max-width: 100%;
+                max-width: 100vw !important;
+                position: relative;
             }
 
             .services-carousel-wrapper,
             .services-carousel,
             .carousel-track {
                 overflow-x: hidden !important;
+                max-width: 100vw !important;
+            }
+
+            .container {
+                padding: 0 15px;
                 max-width: 100vw;
             }
 
@@ -952,16 +954,22 @@
                 padding: 0 15px;
             }
 
-            /* FIX 2: Header - jazyky pod text */
+            /* FIX 2: Header úzky - minimálny padding */
+            header {
+                padding: 8px 0;
+                min-height: auto;
+            }
+
             .logo-text h1 {
-                font-size: 0.95em;
+                font-size: 0.9em;
                 text-align: center;
+                padding: 0 10px;
             }
 
             .header-content {
                 flex-direction: column;
-                padding: 10px 15px;
-                gap: 8px;
+                padding: 5px 10px;
+                gap: 6px;
             }
 
             .lang-switcher {
@@ -971,8 +979,8 @@
             }
 
             .lang-btn {
-                padding: 6px 14px;
-                font-size: 0.85em;
+                padding: 5px 12px;
+                font-size: 0.8em;
             }
 
             .sticky-nav {
@@ -980,30 +988,36 @@
             }
 
             .services {
-                padding: 50px 0 60px 0;
+                padding: 40px 0 50px 0;
             }
 
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 25px;
+                margin-bottom: 20px;
+                padding: 0 10px;
             }
 
-            /* FIX 3: Service cards - zmestit na screen */
+            /* FIX 3: Service cards MENŠIE - zmestia sa na screen */
             .services-carousel {
-                min-height: 88vh;
+                min-height: 82vh;
             }
 
             .service-card {
-                width: 90vw;
-                max-width: 340px;
-                min-height: 84vh;
-                padding: 20px;
+                width: 92vw;
+                max-width: 350px;
+                min-height: 76vh;
+                padding: 18px;
             }
 
             .service-card h3 {
-                font-size: 1.15em;
-                min-height: 55px;
-                padding: 8px;
+                font-size: 1.1em;
+                min-height: 48px;
+                padding: 6px;
+            }
+
+            .service-card p {
+                font-size: 0.88em;
+                margin-bottom: 6px;
             }
 
             .service-card ul {
@@ -1012,40 +1026,41 @@
             }
 
             .service-card ul li {
-                font-size: 0.88em;
-                margin: 7px 0;
-                padding-left: 24px;
+                font-size: 0.85em;
+                margin: 6px 0;
+                padding-left: 22px;
+                line-height: 1.4;
             }
 
             .service-contact {
-                min-height: 90px;
-                padding: 12px;
+                min-height: 85px;
+                padding: 10px;
             }
 
             .service-contact strong {
-                font-size: 0.9em;
+                font-size: 0.88em;
             }
 
             .service-contact p {
-                font-size: 0.82em;
+                font-size: 0.8em;
             }
 
             .service-buttons {
                 min-height: auto;
-                gap: 8px;
+                gap: 7px;
             }
 
             .service-btn {
-                font-size: 0.82em;
-                padding: 10px 16px;
+                font-size: 0.8em;
+                padding: 9px 14px;
             }
 
             .service-gallery {
-                height: 140px;
+                height: 130px;
             }
 
             .gallery-placeholder {
-                font-size: 2.5em;
+                font-size: 2.2em;
             }
 
             .service-card.center {
@@ -1053,12 +1068,12 @@
             }
 
             .service-card.left {
-                transform: scale(0.6) translateX(-280px);
+                transform: scale(0.58) translateX(-280px);
                 opacity: 0.2;
             }
 
             .service-card.right {
-                transform: scale(0.6) translateX(280px);
+                transform: scale(0.58) translateX(280px);
                 opacity: 0.2;
             }
 
@@ -1069,9 +1084,9 @@
             }
 
             .carousel-nav {
-                width: 48px;
-                height: 48px;
-                font-size: 22px;
+                width: 46px;
+                height: 46px;
+                font-size: 20px;
             }
 
             .carousel-nav.prev {
@@ -1082,43 +1097,73 @@
                 right: 5px;
             }
 
-            /* FIX 4: Bodky - lepšia viditeľnosť */
             .carousel-dots {
-                gap: 10px;
-                margin-top: 2vh;
+                gap: 9px;
+                margin-top: 1.5vh;
             }
 
             .carousel-dot {
-                width: 11px;
-                height: 11px;
+                width: 10px;
+                height: 10px;
             }
 
             .carousel-dot.active {
-                width: 13px;
-                height: 13px;
+                width: 12px;
+                height: 12px;
+            }
+
+            /* FIX 4: Sociálne siete - v rámci obrazovky */
+            .social-media {
+                padding: 50px 0;
             }
 
             .social-container {
                 grid-template-columns: 1fr;
-                padding: 0 20px;
+                padding: 0 15px;
+                gap: 20px;
+                max-width: 100%;
             }
             
             .social-card {
                 max-width: 100%;
+                padding: 30px 20px;
+            }
+
+            .social-button {
+                padding: 12px 30px;
+                font-size: 1.1em;
+            }
+
+            /* Kontakty */
+            .contact {
+                padding: 40px 0;
+            }
+
+            .contact .section-title {
+                font-size: 1.8em;
+                padding: 8px 20px;
+                margin-bottom: 30px;
             }
 
             .contact-grid {
                 grid-template-columns: 1fr;
-                padding: 0 20px;
+                padding: 0 15px;
+                gap: 20px;
+                max-width: 100%;
             }
             
             .contact-card {
                 max-width: 100%;
+                padding: 25px 20px;
             }
             
             .contact-info {
                 margin: 20px 15px;
-                padding: 25px 20px;
+                padding: 20px 15px;
+            }
+
+            .contact-info h3 {
+                font-size: 1.3em;
             }
         }
 
@@ -1136,15 +1181,19 @@
             }
             
             .service-card {
-                width: 92vw;
-                max-width: 320px;
-                min-height: 86vh;
-                padding: 18px;
+                width: 94vw;
+                max-width: 330px;
+                min-height: 78vh;
+                padding: 16px;
             }
             
             .service-card h3 {
-                font-size: 1.1em;
-                min-height: 50px;
+                font-size: 1.05em;
+                min-height: 45px;
+            }
+
+            .service-card ul li {
+                font-size: 0.83em;
             }
 
             .service-card.left {
