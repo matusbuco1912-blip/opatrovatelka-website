@@ -184,6 +184,7 @@
             text-align: center;
             position: relative;
             z-index: 10;
+            margin-top: 0;
         }
 
         .hero h2 {
@@ -281,7 +282,9 @@
             flex-direction: column;
             gap: 18px;
             position: absolute;
-            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
+                        filter 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
             backdrop-filter: blur(5px);
             visibility: visible;
@@ -932,10 +935,15 @@
                 position: relative;
             }
 
-            /* Background väčší a rovnaké správanie ako desktop */
+            /* Background ROVNAKÝ ako na desktop - veľký a fixný */
             body::before {
-                background-size: 50%;
-                background-position: center 70%;
+                background-size: 35%;
+                background-position: center 75%;
+                background-attachment: fixed;
+            }
+
+            body::after {
+                background-attachment: fixed;
             }
 
             .services-carousel-wrapper,
@@ -949,29 +957,32 @@
                 max-width: 100vw;
             }
 
-            /* Hero užšie texty */
+            /* Hero UŽŠIA - odstránený gap s headerom */
             .hero {
-                padding: 15px 0;
+                padding: 12px 0;
+                margin-top: 0;
             }
 
             .hero h2 {
-                font-size: 1.6em;
-                padding: 0 20px;
-                line-height: 1.3;
+                font-size: 1.4em;
+                padding: 0 25px;
+                line-height: 1.25;
+                margin-bottom: 8px;
             }
 
             .hero p {
-                font-size: 0.95em;
-                padding: 0 20px;
-                line-height: 1.4;
+                font-size: 0.88em;
+                padding: 0 25px;
+                line-height: 1.35;
             }
 
-            /* FIX 2: Header VEĽMI úzky - minimálny padding, STICKY */
+            /* FIX 2: Header VEĽMI úzky - minimálny padding, STICKY, bez medzery */
             header {
                 padding: 4px 0;
                 min-height: auto;
                 position: sticky;
                 top: 0;
+                margin-bottom: 0;
             }
 
             .logo-text h1 {
@@ -1119,24 +1130,15 @@
                 z-index: 0 !important;
             }
 
+            /* Šípky SKRYTÉ na mobile */
             .carousel-nav {
-                width: 44px;
-                height: 44px;
-                font-size: 18px;
-                z-index: 100 !important;
+                display: none !important;
             }
 
-            .carousel-nav.prev {
-                left: 5px;
-            }
-
-            .carousel-nav.next {
-                right: 5px;
-            }
-
+            /* Bodky NIŽŠIE aby service cards cez ne neprechádzali */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 1.5vh;
+                margin-top: 4vh;
                 position: relative;
                 z-index: 15;
             }
@@ -1210,13 +1212,19 @@
             .logo-text h1 {
                 font-size: 0.75em;
             }
+
+            body::before {
+                background-size: 40%;
+            }
             
             .hero h2 {
-                font-size: 1.5em;
+                font-size: 1.3em;
+                padding: 0 30px;
             }
             
             .hero p {
-                font-size: 0.9em;
+                font-size: 0.82em;
+                padding: 0 30px;
             }
             
             .service-card {
@@ -1533,21 +1541,22 @@
         const totalSlides = cards.length;
         let isTransitioning = false;
 
-        // Swipe/Drag variables
+        // Enhanced drag variables
         let startX = 0;
         let startY = 0;
         let currentX = 0;
         let currentY = 0;
         let isDragging = false;
         let isHorizontalSwipe = null;
-        const swipeThreshold = 50;
+        let dragOffset = 0; // Current drag offset
+        let animationFrame = null;
 
         // Initialize carousel
         function initCarousel() {
             // Ensure page starts at the very top
             window.scrollTo(0, 0);
             
-            updateCarousel();
+            updateCarousel(0);
             createDots();
             
             // Add swipe/drag listeners
@@ -1601,13 +1610,20 @@
             if (isTransitioning) return;
             isDragging = true;
             isHorizontalSwipe = null;
+            dragOffset = 0;
             startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
             startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
             currentX = startX;
             currentY = startY;
+            
+            // Cancel any ongoing animation
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+                animationFrame = null;
+            }
         }
 
-        // Handle drag/swipe move
+        // Handle drag/swipe move - REAL-TIME ROTATION
         function handleDragMove(e) {
             if (!isDragging) return;
             
@@ -1622,33 +1638,80 @@
                 isHorizontalSwipe = diffX > diffY;
             }
             
-            // If horizontal swipe detected, prevent vertical scroll
-            if (isHorizontalSwipe && e.cancelable) {
-                e.preventDefault();
+            // If horizontal swipe detected, apply real-time transform
+            if (isHorizontalSwipe) {
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+                
+                // Calculate drag offset (normalized)
+                const rawOffset = currentX - startX;
+                const cardWidth = window.innerWidth > 768 ? 600 : 340;
+                dragOffset = rawOffset / cardWidth; // Normalize to card widths
+                
+                // Apply real-time transform with drag offset
+                updateCarousel(dragOffset);
             }
         }
 
-        // Handle drag/swipe end
+        // Handle drag/swipe end - SNAP TO NEAREST
         function handleDragEnd(e) {
             if (!isDragging) return;
             isDragging = false;
             
-            // Only trigger slide change if it was a horizontal swipe
+            // Only process if it was a horizontal swipe
             if (isHorizontalSwipe) {
-                const diff = startX - currentX;
+                // Determine which slide to snap to based on drag distance
+                const threshold = 0.25; // 25% of card width to trigger slide change
                 
-                if (Math.abs(diff) > swipeThreshold) {
-                    if (diff > 0) {
-                        // Swiped left - go to next slide
-                        nextSlide();
-                    } else {
-                        // Swiped right - go to previous slide
-                        prevSlide();
-                    }
+                if (dragOffset < -threshold) {
+                    // Dragged right significantly - go to previous slide
+                    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                } else if (dragOffset > threshold) {
+                    // Dragged left significantly - go to next slide
+                    currentSlide = (currentSlide + 1) % totalSlides;
                 }
+                
+                // Snap to the target slide with smooth animation
+                animateToSlide();
+            } else {
+                // Reset if it wasn't a horizontal swipe
+                dragOffset = 0;
+                updateCarousel(0);
             }
             
             isHorizontalSwipe = null;
+        }
+
+        // Animate smoothly to the target slide
+        function animateToSlide() {
+            const startOffset = dragOffset;
+            const targetOffset = 0;
+            const duration = 300; // ms
+            const startTime = performance.now();
+            
+            function animate(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function (ease-out)
+                const eased = 1 - Math.pow(1 - progress, 3);
+                
+                // Interpolate between start and target
+                const currentOffset = startOffset + (targetOffset - startOffset) * eased;
+                dragOffset = currentOffset;
+                
+                updateCarousel(dragOffset);
+                
+                if (progress < 1) {
+                    animationFrame = requestAnimationFrame(animate);
+                } else {
+                    dragOffset = 0;
+                    animationFrame = null;
+                }
+            }
+            
+            animationFrame = requestAnimationFrame(animate);
         }
 
         // Moderate speed smooth scroll to services section on page load with user input detection
@@ -1715,17 +1778,14 @@
             }
         }
 
-        // Update carousel view
-        function updateCarousel() {
-            // Nastavíme flag že prebieha transakcia
-            isTransitioning = true;
-            
+        // Update carousel view with optional drag offset
+        function updateCarousel(offset = 0) {
             cards.forEach((card, index) => {
                 // Remove all classes
                 card.classList.remove('center', 'left', 'right', 'far-left', 'far-right', 'hidden');
                 
-                // Calculate position relative to current slide
-                let position = index - currentSlide;
+                // Calculate position relative to current slide (with drag offset)
+                let position = index - currentSlide - offset;
                 
                 // Handle wrap-around for infinite loop
                 if (position < -Math.floor(totalSlides / 2)) {
@@ -1734,51 +1794,78 @@
                     position -= totalSlides;
                 }
                 
-                // Assign classes based on position
-                if (position === 0) {
+                // Determine which class to apply based on position
+                const absPos = Math.abs(position);
+                
+                if (absPos < 0.5) {
                     card.classList.add('center');
-                } else if (position === -1) {
-                    card.classList.add('left');
-                } else if (position === -2) {
-                    card.classList.add('far-left');
-                } else if (position === 1) {
+                    // Apply slight transform based on drag offset for smooth dragging
+                    if (Math.abs(offset) > 0) {
+                        const isMobile = window.innerWidth <= 768;
+                        const dragDistance = isMobile ? -offset * 250 : -offset * 710;
+                        card.style.transform = `scale(1.05) translateX(${dragDistance}px)`;
+                    } else {
+                        card.style.transform = '';
+                    }
+                } else if (position >= 0.5 && position < 1.5) {
                     card.classList.add('right');
-                } else if (position === 2) {
+                    if (Math.abs(offset) > 0) {
+                        const isMobile = window.innerWidth <= 768;
+                        const baseTranslate = isMobile ? 250 : 710;
+                        const dragDistance = -offset * (isMobile ? 250 : 710);
+                        card.style.transform = `scale(0.65) translateX(${baseTranslate + dragDistance}px)`;
+                    } else {
+                        card.style.transform = '';
+                    }
+                } else if (position <= -0.5 && position > -1.5) {
+                    card.classList.add('left');
+                    if (Math.abs(offset) > 0) {
+                        const isMobile = window.innerWidth <= 768;
+                        const baseTranslate = isMobile ? -250 : -710;
+                        const dragDistance = -offset * (isMobile ? 250 : 710);
+                        card.style.transform = `scale(0.65) translateX(${baseTranslate + dragDistance}px)`;
+                    } else {
+                        card.style.transform = '';
+                    }
+                } else if (position >= 1.5) {
                     card.classList.add('far-right');
+                    card.style.transform = '';
+                } else if (position <= -1.5) {
+                    card.classList.add('far-left');
+                    card.style.transform = '';
                 } else {
                     card.classList.add('hidden');
+                    card.style.transform = '';
                 }
             });
 
-            // Update dots with smooth transition
+            // Update dots
             const dots = document.querySelectorAll('.carousel-dot');
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSlide);
             });
-
-            // Po 700ms (dĺžka transition) povolíme ďalšiu transakciu
-            setTimeout(() => {
-                isTransitioning = false;
-            }, 700);
         }
 
         // Navigation functions
         function nextSlide() {
-            if (isTransitioning) return;
+            if (isDragging) return;
+            dragOffset = 1; // Start from +1 offset
             currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
+            animateToSlide();
         }
 
         function prevSlide() {
-            if (isTransitioning) return;
+            if (isDragging) return;
+            dragOffset = -1; // Start from -1 offset
             currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateCarousel();
+            animateToSlide();
         }
 
         function goToSlide(index) {
-            if (isTransitioning) return;
+            if (isDragging) return;
             currentSlide = index;
-            updateCarousel();
+            dragOffset = 0;
+            updateCarousel(0);
         }
 
         // Auto-advance carousel
