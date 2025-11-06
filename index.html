@@ -1418,8 +1418,11 @@
 
         // Swipe/Drag variables
         let startX = 0;
+        let startY = 0;
         let currentX = 0;
+        let currentY = 0;
         let isDragging = false;
+        let isHorizontalSwipe = null;
         const swipeThreshold = 50;
 
         // Initialize carousel
@@ -1433,9 +1436,9 @@
             // Add swipe/drag listeners
             const carouselTrack = document.getElementById('carouselTrack');
             
-            // Touch events (mobile)
-            carouselTrack.addEventListener('touchstart', handleDragStart, { passive: true });
-            carouselTrack.addEventListener('touchmove', handleDragMove, { passive: true });
+            // Touch events (mobile) - NOT passive so we can preventDefault
+            carouselTrack.addEventListener('touchstart', handleDragStart, { passive: false });
+            carouselTrack.addEventListener('touchmove', handleDragMove, { passive: false });
             carouselTrack.addEventListener('touchend', handleDragEnd);
             
             // Mouse events (desktop)
@@ -1480,14 +1483,32 @@
         function handleDragStart(e) {
             if (isTransitioning) return;
             isDragging = true;
+            isHorizontalSwipe = null;
             startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+            startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
             currentX = startX;
+            currentY = startY;
         }
 
         // Handle drag/swipe move
         function handleDragMove(e) {
             if (!isDragging) return;
+            
             currentX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+            currentY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+            
+            const diffX = Math.abs(currentX - startX);
+            const diffY = Math.abs(currentY - startY);
+            
+            // Determine swipe direction on first significant move
+            if (isHorizontalSwipe === null && (diffX > 10 || diffY > 10)) {
+                isHorizontalSwipe = diffX > diffY;
+            }
+            
+            // If horizontal swipe detected, prevent vertical scroll
+            if (isHorizontalSwipe && e.cancelable) {
+                e.preventDefault();
+            }
         }
 
         // Handle drag/swipe end
@@ -1495,17 +1516,22 @@
             if (!isDragging) return;
             isDragging = false;
             
-            const diff = startX - currentX;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Swiped left - go to next slide
-                    nextSlide();
-                } else {
-                    // Swiped right - go to previous slide
-                    prevSlide();
+            // Only trigger slide change if it was a horizontal swipe
+            if (isHorizontalSwipe) {
+                const diff = startX - currentX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        // Swiped left - go to next slide
+                        nextSlide();
+                    } else {
+                        // Swiped right - go to previous slide
+                        prevSlide();
+                    }
                 }
             }
+            
+            isHorizontalSwipe = null;
         }
 
         // Moderate speed smooth scroll to services section on page load with user input detection
