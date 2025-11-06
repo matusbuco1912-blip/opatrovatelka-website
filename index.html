@@ -282,9 +282,10 @@
             flex-direction: column;
             gap: 18px;
             position: absolute;
-            transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), 
-                        filter 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-                        box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        filter 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
             backdrop-filter: blur(5px);
             visibility: visible;
@@ -937,13 +938,13 @@
 
             /* Background ROVNAKÝ ako na desktop - veľký a fixný */
             body::before {
-                background-size: 35%;
-                background-position: center 75%;
-                background-attachment: fixed;
+                background-size: 35% !important;
+                background-position: center 75% !important;
+                background-attachment: fixed !important;
             }
 
             body::after {
-                background-attachment: fixed;
+                background-attachment: fixed !important;
             }
 
             .services-carousel-wrapper,
@@ -959,30 +960,31 @@
 
             /* Hero UŽŠIA - odstránený gap s headerom */
             .hero {
-                padding: 12px 0;
-                margin-top: 0;
+                padding: 8px 0 !important;
+                margin-top: 0 !important;
             }
 
             .hero h2 {
-                font-size: 1.4em;
-                padding: 0 25px;
-                line-height: 1.25;
-                margin-bottom: 8px;
+                font-size: 1.25em !important;
+                padding: 0 30px !important;
+                line-height: 1.2 !important;
+                margin-bottom: 6px !important;
             }
 
             .hero p {
-                font-size: 0.88em;
-                padding: 0 25px;
-                line-height: 1.35;
+                font-size: 0.82em !important;
+                padding: 0 30px !important;
+                line-height: 1.3 !important;
             }
 
             /* FIX 2: Header VEĽMI úzky - minimálny padding, STICKY, bez medzery */
             header {
-                padding: 4px 0;
-                min-height: auto;
-                position: sticky;
-                top: 0;
-                margin-bottom: 0;
+                padding: 4px 0 !important;
+                min-height: auto !important;
+                position: sticky !important;
+                top: 0 !important;
+                margin-bottom: 0 !important;
+                border-bottom: none !important;
             }
 
             .logo-text h1 {
@@ -990,12 +992,14 @@
                 text-align: center;
                 padding: 0 8px;
                 line-height: 1.2;
+                margin: 0;
             }
 
             .header-content {
                 flex-direction: column;
                 padding: 3px 8px;
                 gap: 4px;
+                margin: 0;
             }
 
             .lang-switcher {
@@ -1135,10 +1139,10 @@
                 display: none !important;
             }
 
-            /* Bodky NIŽŠIE aby service cards cez ne neprechádzali */
+            /* Bodky EŠTE NIŽŠIE aby service cards cez ne neprechádzali */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 4vh;
+                margin-top: 6vh !important;
                 position: relative;
                 z-index: 15;
             }
@@ -1214,17 +1218,22 @@
             }
 
             body::before {
-                background-size: 40%;
+                background-size: 40% !important;
+                background-position: center 75% !important;
+            }
+
+            .hero {
+                padding: 6px 0 !important;
             }
             
             .hero h2 {
-                font-size: 1.3em;
-                padding: 0 30px;
+                font-size: 1.15em !important;
+                padding: 0 35px !important;
             }
             
             .hero p {
-                font-size: 0.82em;
-                padding: 0 30px;
+                font-size: 0.78em !important;
+                padding: 0 35px !important;
             }
             
             .service-card {
