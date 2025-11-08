@@ -930,16 +930,19 @@
                 overflow-x: hidden !important;
                 overflow-y: auto !important;
                 max-width: 100vw !important;
-                overscroll-behavior-y: contain !important;
+                overscroll-behavior: none !important; /* Completely disable overscroll */
+                -webkit-overscroll-behavior: none !important;
             }
             
             body { 
                 overflow-x: hidden !important;
-                overflow-y: visible !important;
+                overflow-y: auto !important;
                 max-width: 100vw !important;
                 position: relative;
-                overscroll-behavior-y: contain !important;
+                overscroll-behavior: none !important; /* Completely disable overscroll */
+                -webkit-overscroll-behavior: none !important;
                 -webkit-overflow-scrolling: touch;
+                touch-action: pan-y; /* Allow only vertical panning */
             }
 
             /* Background väčší a rovnaké správanie ako desktop */
@@ -1024,13 +1027,13 @@
 
             /* FIX 3: Service cards VIDITEĽNÉ a zmestené na screen */
             .services-carousel {
-                min-height: 75vh;
+                min-height: 85vh; /* Increased from 75vh to ensure space for dots */
                 overflow: visible !important;
             }
 
             .services-carousel-wrapper {
                 overflow: visible !important;
-                padding-bottom: 60px; /* Extra space for dots */
+                padding-bottom: 100px; /* Increased from 60px to ensure dots don't overlap */
             }
 
             .carousel-track {
@@ -1043,6 +1046,7 @@
                 min-height: 70vh;
                 padding: 16px;
                 position: absolute !important;
+                margin-bottom: 80px; /* Add margin to ensure space for dots */
             }
 
             .service-card h3 {
@@ -1092,11 +1096,11 @@
             }
 
             .service-gallery {
-                height: 120px;
+                height: 150px; /* Increased from 120px for better photo visibility */
                 overflow: hidden;
             }
 
-            /* FIX: Photos fill entire gallery area on mobile */
+            /* FIX: Photos fill entire gallery area on mobile with better positioning */
             .service-gallery-item {
                 display: flex;
                 align-items: center;
@@ -1108,7 +1112,8 @@
                 position: relative;
                 width: 100%;
                 height: 100%;
-                object-fit: cover; /* Changed from contain to cover for mobile */
+                object-fit: cover; /* Cover to fill space */
+                object-position: center top; /* Show top part of image */
             }
 
             .gallery-placeholder {
@@ -1161,10 +1166,10 @@
                 right: 5px;
             }
 
-            /* FIX: Dots positioned lower to not overlap cards */
+            /* FIX: Dots positioned much lower to avoid overlapping cards */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 40px; /* Increased from 1.5vh */
+                margin-top: 80px; /* Significantly increased from 40px */
                 position: relative;
                 z-index: 15;
             }
@@ -1659,7 +1664,7 @@
             }
         }
 
-        // Handle drag/swipe end - FIX: Reversed swipe direction for mobile
+        // Handle drag/swipe end - FIX: Correct swipe direction for mobile
         function handleDragEnd(e) {
             if (!isDragging) return;
             isDragging = false;
@@ -1670,13 +1675,13 @@
                 
                 if (Math.abs(diff) > swipeThreshold) {
                     if (isMobile) {
-                        // MOBILE: Reversed - swipe left to go to previous, swipe right to go to next
+                        // MOBILE: swipe left to go next, swipe right to go previous
                         if (diff > 0) {
-                            // Swiped left - go to PREVIOUS slide
-                            prevSlide();
-                        } else {
-                            // Swiped right - go to NEXT slide
+                            // Swiped left - go to NEXT slide
                             nextSlide();
+                        } else {
+                            // Swiped right - go to PREVIOUS slide
+                            prevSlide();
                         }
                     } else {
                         // DESKTOP: Keep original behavior
@@ -1703,10 +1708,11 @@
             let offsetPosition;
             
             if (isMobile) {
-                // MOBILE: Scroll so hero section is just out of view
+                // MOBILE: Scroll deeper - completely hide hero section plus some extra
                 const hero = document.querySelector('.hero');
-                elementPosition = hero.getBoundingClientRect().bottom;
-                offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                const heroBottom = hero.getBoundingClientRect().bottom;
+                // Add extra 30px to ensure hero is completely out of view
+                offsetPosition = heroBottom + window.pageYOffset + 30;
             } else {
                 // DESKTOP: Original behavior - scroll to services title
                 const servicesTitle = document.querySelector('.services .section-title');
@@ -1900,11 +1906,10 @@
                     
                     if (targetId === '#services') {
                         if (isMobile) {
-                            // Mobile: scroll to just below hero
+                            // Mobile: scroll deeper - completely hide hero
                             const hero = document.querySelector('.hero');
-                            const headerHeight = 60;
-                            const elementPosition = hero.getBoundingClientRect().bottom;
-                            offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                            const heroBottom = hero.getBoundingClientRect().bottom;
+                            offsetPosition = heroBottom + window.pageYOffset + 30;
                         } else {
                             // Desktop: original behavior
                             const servicesTitle = document.querySelector('.services .section-title');
