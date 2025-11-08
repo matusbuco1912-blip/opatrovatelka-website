@@ -290,7 +290,7 @@
         /* Mobile faster transitions */
         @media (max-width: 768px) {
             .service-card {
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Faster for mobile */
+                transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); /* Much faster for mobile */
             }
         }
 
@@ -1028,20 +1028,23 @@
 
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 5px; /* Further reduced - title even closer to top */
+                margin-bottom: 8px; /* Small gap to avoid title overlap */
                 padding: 0 10px;
+                position: relative;
+                z-index: 5; /* Ensure title stays visible */
             }
 
             /* FIX 3: Service cards VIDITEĽNÉ a zmestené na screen */
             .services-carousel {
-                min-height: 75vh; /* Reduced to fit everything on screen */
+                min-height: 72vh; /* Reduced to fit everything better */
                 overflow: visible !important;
-                padding-top: 20px; /* Increased to push boxes down */
+                padding-top: 35px; /* Increased significantly to push boxes down from title */
+                margin-top: 5px; /* Extra spacing from title */
             }
 
             .services-carousel-wrapper {
                 overflow: visible !important;
-                padding-bottom: 60px; /* Adjusted for better fit */
+                padding-bottom: 50px; /* Space for dots */
             }
 
             .carousel-track {
@@ -1049,24 +1052,24 @@
             }
 
             .service-card {
-                width: 90vw;
-                max-width: 340px;
-                min-height: 70vh;
-                padding: 16px;
+                width: 88vw; /* Slightly narrower */
+                max-width: 330px; /* Reduced from 340px */
+                min-height: 62vh; /* Reduced height to prevent overlap */
+                padding: 14px; /* Slightly less padding */
                 position: absolute !important;
-                margin-bottom: 80px; /* Add margin to ensure space for dots */
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Faster transition for mobile */
+                margin-bottom: 70px; /* Space for dots */
+                transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Faster transition matching JS */
             }
 
             .service-card h3 {
-                font-size: 1.05em;
-                min-height: 42px;
-                padding: 5px;
+                font-size: 1em; /* Slightly smaller */
+                min-height: 38px; /* Reduced height */
+                padding: 4px; /* Less padding */
             }
 
             .service-card p {
-                font-size: 0.85em;
-                margin-bottom: 5px;
+                font-size: 0.82em; /* Smaller text */
+                margin-bottom: 4px;
             }
 
             .service-card ul {
@@ -1075,37 +1078,37 @@
             }
 
             .service-card ul li {
-                font-size: 0.82em;
-                margin: 5px 0;
-                padding-left: 20px;
-                line-height: 1.4;
+                font-size: 0.78em; /* Smaller list items */
+                margin: 4px 0; /* Less margin */
+                padding-left: 18px;
+                line-height: 1.3;
             }
 
             .service-contact {
-                min-height: 80px;
-                padding: 9px;
+                min-height: 70px; /* Reduced from 80px */
+                padding: 8px; /* Less padding */
             }
 
             .service-contact strong {
-                font-size: 0.85em;
+                font-size: 0.82em; /* Smaller */
             }
 
             .service-contact p {
-                font-size: 0.78em;
+                font-size: 0.75em; /* Smaller */
             }
 
             .service-buttons {
                 min-height: auto;
-                gap: 6px;
+                gap: 5px; /* Less gap */
             }
 
             .service-btn {
-                font-size: 0.78em;
-                padding: 8px 12px;
+                font-size: 0.75em; /* Smaller buttons */
+                padding: 7px 10px; /* Less padding */
             }
 
             .service-gallery {
-                height: 150px; /* Increased from 120px for better photo visibility */
+                height: 130px; /* Reduced from 150px */
                 overflow: hidden;
             }
 
@@ -1165,12 +1168,13 @@
                 display: none !important;
             }
 
-            /* FIX: Dots positioned much higher to fit on screen with title and box */
+            /* FIX: Dots positioned lower to avoid being overlapped by cards */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 10px; /* Much reduced from 30px to fit everything on screen */
+                margin-top: 15px; /* Adjusted for better spacing */
                 position: relative;
                 z-index: 15;
+                padding-bottom: 10px; /* Extra padding at bottom */
             }
 
             .carousel-dot {
@@ -1819,7 +1823,7 @@
             });
 
             // Faster transition for mobile, original for desktop
-            const transitionTime = isMobile ? 400 : 700; // 400ms for mobile, 700ms for desktop
+            const transitionTime = isMobile ? 250 : 700; // 250ms for mobile (faster), 700ms for desktop
             setTimeout(() => {
                 isTransitioning = false;
             }, transitionTime);
