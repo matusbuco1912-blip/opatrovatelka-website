@@ -286,6 +286,13 @@
             backdrop-filter: blur(5px);
             visibility: visible;
         }
+        
+        /* Mobile faster transitions */
+        @media (max-width: 768px) {
+            .service-card {
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Faster for mobile */
+            }
+        }
 
         /* HIDDEN CARDS - Completely invisible */
         .service-card.hidden {
@@ -1016,24 +1023,25 @@
             }
 
             .services {
-                padding: 30px 0 40px 0;
+                padding: 10px 0 40px 0; /* Further reduced top padding to move title up */
             }
 
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 20px;
+                margin-bottom: 5px; /* Further reduced - title even closer to top */
                 padding: 0 10px;
             }
 
             /* FIX 3: Service cards VIDITEĽNÉ a zmestené na screen */
             .services-carousel {
-                min-height: 85vh; /* Increased from 75vh to ensure space for dots */
+                min-height: 75vh; /* Reduced to fit everything on screen */
                 overflow: visible !important;
+                padding-top: 20px; /* Increased to push boxes down */
             }
 
             .services-carousel-wrapper {
                 overflow: visible !important;
-                padding-bottom: 100px; /* Increased from 60px to ensure dots don't overlap */
+                padding-bottom: 60px; /* Adjusted for better fit */
             }
 
             .carousel-track {
@@ -1047,6 +1055,7 @@
                 padding: 16px;
                 position: absolute !important;
                 margin-bottom: 80px; /* Add margin to ensure space for dots */
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Faster transition for mobile */
             }
 
             .service-card h3 {
@@ -1151,25 +1160,15 @@
                 z-index: 0 !important;
             }
 
+            /* Hide navigation arrows on mobile */
             .carousel-nav {
-                width: 44px;
-                height: 44px;
-                font-size: 18px;
-                z-index: 100 !important;
+                display: none !important;
             }
 
-            .carousel-nav.prev {
-                left: 5px;
-            }
-
-            .carousel-nav.next {
-                right: 5px;
-            }
-
-            /* FIX: Dots positioned much lower to avoid overlapping cards */
+            /* FIX: Dots positioned much higher to fit on screen with title and box */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 80px; /* Significantly increased from 40px */
+                margin-top: 10px; /* Much reduced from 30px to fit everything on screen */
                 position: relative;
                 z-index: 15;
             }
@@ -1708,11 +1707,11 @@
             let offsetPosition;
             
             if (isMobile) {
-                // MOBILE: Scroll deeper - completely hide hero section plus some extra
+                // MOBILE: Scroll just enough to hide hero section (less deep)
                 const hero = document.querySelector('.hero');
                 const heroBottom = hero.getBoundingClientRect().bottom;
-                // Add extra 30px to ensure hero is completely out of view
-                offsetPosition = heroBottom + window.pageYOffset + 30;
+                // Only 5px extra to ensure hero is just out of view
+                offsetPosition = heroBottom + window.pageYOffset + 5;
             } else {
                 // DESKTOP: Original behavior - scroll to services title
                 const servicesTitle = document.querySelector('.services .section-title');
@@ -1819,10 +1818,11 @@
                 dot.classList.toggle('active', index === currentSlide);
             });
 
-            // Po 700ms (dĺžka transition) povolíme ďalšiu transakciu
+            // Faster transition for mobile, original for desktop
+            const transitionTime = isMobile ? 400 : 700; // 400ms for mobile, 700ms for desktop
             setTimeout(() => {
                 isTransitioning = false;
-            }, 700);
+            }, transitionTime);
         }
 
         // Navigation functions
@@ -1906,10 +1906,10 @@
                     
                     if (targetId === '#services') {
                         if (isMobile) {
-                            // Mobile: scroll deeper - completely hide hero
+                            // Mobile: scroll just enough to hide hero
                             const hero = document.querySelector('.hero');
                             const heroBottom = hero.getBoundingClientRect().bottom;
-                            offsetPosition = heroBottom + window.pageYOffset + 30;
+                            offsetPosition = heroBottom + window.pageYOffset + 5;
                         } else {
                             // Desktop: original behavior
                             const servicesTitle = document.querySelector('.services .section-title');
