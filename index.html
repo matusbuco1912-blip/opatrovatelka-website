@@ -290,7 +290,7 @@
         /* Mobile faster transitions */
         @media (max-width: 768px) {
             .service-card {
-                transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); /* Much faster for mobile */
+                transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* 350ms for mobile */
             }
         }
 
@@ -1023,28 +1023,28 @@
             }
 
             .services {
-                padding: 10px 0 40px 0; /* Further reduced top padding to move title up */
+                padding: 15px 0 40px 0; /* Top padding for services section */
             }
 
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 8px; /* Small gap to avoid title overlap */
+                margin-bottom: 15px; /* Increased gap between title and cards */
                 padding: 0 10px;
                 position: relative;
-                z-index: 5; /* Ensure title stays visible */
+                z-index: 5; /* Keep title below cards */
             }
 
             /* FIX 3: Service cards VIDITEĽNÉ a zmestené na screen */
             .services-carousel {
-                min-height: 72vh; /* Reduced to fit everything better */
+                min-height: 70vh; /* Reduced height */
                 overflow: visible !important;
-                padding-top: 35px; /* Increased significantly to push boxes down from title */
-                margin-top: 5px; /* Extra spacing from title */
+                padding-top: 50px; /* Significantly increased to push boxes down from title */
+                margin-top: 10px; /* Extra spacing from title */
             }
 
             .services-carousel-wrapper {
                 overflow: visible !important;
-                padding-bottom: 50px; /* Space for dots */
+                padding-bottom: 45px; /* Space for dots */
             }
 
             .carousel-track {
@@ -1054,11 +1054,11 @@
             .service-card {
                 width: 88vw; /* Slightly narrower */
                 max-width: 330px; /* Reduced from 340px */
-                min-height: 62vh; /* Reduced height to prevent overlap */
+                min-height: 60vh; /* Further reduced height */
                 padding: 14px; /* Slightly less padding */
                 position: absolute !important;
-                margin-bottom: 70px; /* Space for dots */
-                transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Faster transition matching JS */
+                margin-bottom: 60px; /* Space for dots */
+                transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important; /* 350ms transition */
             }
 
             .service-card h3 {
@@ -1171,10 +1171,10 @@
             /* FIX: Dots positioned lower to avoid being overlapped by cards */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 15px; /* Adjusted for better spacing */
+                margin-top: 10px; /* Reduced for tighter fit */
                 position: relative;
                 z-index: 15;
-                padding-bottom: 10px; /* Extra padding at bottom */
+                padding-bottom: 5px; /* Less padding */
             }
 
             .carousel-dot {
@@ -1823,7 +1823,7 @@
             });
 
             // Faster transition for mobile, original for desktop
-            const transitionTime = isMobile ? 250 : 700; // 250ms for mobile (faster), 700ms for desktop
+            const transitionTime = isMobile ? 350 : 700; // 350ms for mobile, 700ms for desktop
             setTimeout(() => {
                 isTransitioning = false;
             }, transitionTime);
