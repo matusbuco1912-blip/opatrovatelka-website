@@ -954,8 +954,9 @@
 
             /* Background väčší a rovnaké správanie ako desktop */
             body::before {
-                background-size: 50%;
-                background-position: center 70%;
+                background-size: 65%; /* Increased from 50% */
+                background-position: center center; /* Fixed center position */
+                background-attachment: fixed; /* Keep it fixed during scroll */
             }
 
             .services-carousel-wrapper,
@@ -1028,7 +1029,7 @@
 
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 15px; /* Increased gap between title and cards */
+                margin-bottom: 20px; /* More space between title and cards */
                 padding: 0 10px;
                 position: relative;
                 z-index: 5; /* Keep title below cards */
@@ -1036,15 +1037,15 @@
 
             /* FIX 3: Service cards VIDITEĽNÉ a zmestené na screen */
             .services-carousel {
-                min-height: 70vh; /* Reduced height */
+                min-height: 68vh; /* Adjusted height */
                 overflow: visible !important;
-                padding-top: 50px; /* Significantly increased to push boxes down from title */
-                margin-top: 10px; /* Extra spacing from title */
+                padding-top: 60px; /* More space to avoid title overlap */
+                margin-top: 0; /* Reset margin */
             }
 
             .services-carousel-wrapper {
                 overflow: visible !important;
-                padding-bottom: 45px; /* Space for dots */
+                padding-bottom: 80px; /* More space for dots */
             }
 
             .carousel-track {
@@ -1054,10 +1055,10 @@
             .service-card {
                 width: 88vw; /* Slightly narrower */
                 max-width: 330px; /* Reduced from 340px */
-                min-height: 60vh; /* Further reduced height */
+                min-height: 58vh; /* Reduced height to make room for dots */
                 padding: 14px; /* Slightly less padding */
                 position: absolute !important;
-                margin-bottom: 60px; /* Space for dots */
+                margin-bottom: 50px; /* Space for dots */
                 transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important; /* 350ms transition */
             }
 
@@ -1099,12 +1100,13 @@
 
             .service-buttons {
                 min-height: auto;
-                gap: 5px; /* Less gap */
+                gap: 4px; /* Smaller gap */
+                margin-bottom: 5px; /* Add margin bottom */
             }
 
             .service-btn {
-                font-size: 0.75em; /* Smaller buttons */
-                padding: 7px 10px; /* Less padding */
+                font-size: 0.72em; /* Even smaller buttons */
+                padding: 6px 8px; /* Less padding */
             }
 
             .service-gallery {
@@ -1168,13 +1170,13 @@
                 display: none !important;
             }
 
-            /* FIX: Dots positioned lower to avoid being overlapped by cards */
+            /* FIX: Dots positioned much lower to be visible below buttons */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 10px; /* Reduced for tighter fit */
+                margin-top: 25px; /* Increased to push dots below buttons */
                 position: relative;
                 z-index: 15;
-                padding-bottom: 5px; /* Less padding */
+                padding-bottom: 10px; /* Add bottom padding */
             }
 
             .carousel-dot {
@@ -1834,30 +1836,53 @@
             if (isTransitioning) return;
             currentSlide = (currentSlide + 1) % totalSlides;
             updateCarousel();
+            stopAutoAdvance(); // Stop auto-advance on manual navigation
         }
 
         function prevSlide() {
             if (isTransitioning) return;
             currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
             updateCarousel();
+            stopAutoAdvance(); // Stop auto-advance on manual navigation
         }
 
         function goToSlide(index) {
             if (isTransitioning) return;
             currentSlide = index;
             updateCarousel();
+            stopAutoAdvance(); // Stop auto-advance on manual navigation
         }
 
-        // Auto-advance carousel
+        // Auto-advance carousel - with user interaction detection
         let autoAdvance = setInterval(nextSlide, 5000);
+        let userHasInteracted = false;
 
-        // Pause auto-advance on hover
+        // Function to stop auto-advance on user interaction
+        function stopAutoAdvance() {
+            if (!userHasInteracted) {
+                userHasInteracted = true;
+                clearInterval(autoAdvance);
+            }
+        }
+
+        // Detect any user interaction
+        window.addEventListener('wheel', stopAutoAdvance, { passive: true, once: true });
+        window.addEventListener('touchstart', stopAutoAdvance, { passive: true, once: true });
+        window.addEventListener('click', stopAutoAdvance, { once: true });
+        window.addEventListener('keydown', stopAutoAdvance, { once: true });
+        window.addEventListener('scroll', stopAutoAdvance, { passive: true, once: true });
+
+        // Pause auto-advance on hover (if not already stopped)
         document.querySelector('.services-carousel').addEventListener('mouseenter', () => {
-            clearInterval(autoAdvance);
+            if (!userHasInteracted) {
+                clearInterval(autoAdvance);
+            }
         });
 
         document.querySelector('.services-carousel').addEventListener('mouseleave', () => {
-            autoAdvance = setInterval(nextSlide, 5000);
+            if (!userHasInteracted) {
+                autoAdvance = setInterval(nextSlide, 5000);
+            }
         });
 
         // Language switcher
