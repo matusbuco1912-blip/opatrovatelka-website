@@ -952,11 +952,16 @@
                 touch-action: pan-y; /* Allow only vertical panning */
             }
 
-            /* Background väčší a rovnaké správanie ako desktop */
+            /* BACKGROUND LOGO - FIXED, CENTERED TO DEVICE, LARGER */
             body::before {
-                background-size: 65%; /* Increased from 50% */
-                background-position: center center; /* Fixed center position */
-                background-attachment: fixed; /* Keep it fixed during scroll */
+                background-size: 80%; /* Increased from 65% - larger */
+                background-position: center center; /* Centered to physical device */
+                background-attachment: fixed; /* Fixed position - no movement during scroll */
+                position: fixed; /* Ensure it's truly fixed */
+                top: 0;
+                left: 0;
+                width: 100vw; /* Full viewport width */
+                height: 100vh; /* Full viewport height */
             }
 
             .services-carousel-wrapper,
@@ -1029,7 +1034,7 @@
 
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 20px;
+                margin-bottom: 35px; /* FIXED: User specified value */
                 padding: 0 10px;
                 position: relative;
                 z-index: 5;
@@ -1109,9 +1114,27 @@
                 padding: 6px 8px; /* Less padding */
             }
 
+            /* PHOTO GALLERY FIXES */
             .service-gallery {
-                height: 130px; /* Reduced from 150px */
+                height: 130px; /* Base height */
                 overflow: hidden;
+            }
+
+            /* First card (ZOS SLNKO) - center photo vertically */
+            .service-card:nth-child(1) .service-gallery-item img {
+                object-position: center center !important; /* Centered to show equal top/bottom */
+            }
+
+            /* Second card (ZOS Ambulantná) and Fourth card (For Hendicap) - bigger gallery */
+            .service-card:nth-child(2) .service-gallery,
+            .service-card:nth-child(4) .service-gallery {
+                height: 180px; /* Increased from 130px to show more photo */
+            }
+
+            /* Maintain spacing for buttons after larger galleries */
+            .service-card:nth-child(2) .service-buttons,
+            .service-card:nth-child(4) .service-buttons {
+                margin-top: 8px; /* Keep consistent spacing */
             }
 
             /* FIX: Photos fill entire gallery area on mobile with better positioning */
@@ -1127,7 +1150,7 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover; /* Cover to fill space */
-                object-position: center top; /* Show top part of image */
+                object-position: center top; /* Show top part of image by default */
             }
 
             .gallery-placeholder {
@@ -1170,13 +1193,13 @@
                 display: none !important;
             }
 
-            /* FIX: Dots positioned much lower to be visible below buttons */
+            /* DOTS POSITION - FIXED VALUE */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 25px; /* Increased to push dots below buttons */
+                margin-top: 81px; /* FIXED: User specified value */
                 position: relative;
                 z-index: 15;
-                padding-bottom: 10px; /* Add bottom padding */
+                padding-bottom: 10px;
             }
 
             .carousel-dot {
@@ -1296,30 +1319,6 @@
     </style>
 </head>
 <body>
-    <!-- DUAL POSITION CONTROL - MOBILE ONLY -->
-    <div id="positionControl" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); color: white; padding: 15px 20px; border-radius: 12px; z-index: 10000; min-width: 300px; box-shadow: 0 8px 30px rgba(0,0,0,0.6);">
-        <!-- Title Margin -->
-        <div style="text-align: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2);">
-            <div style="font-weight: bold; font-size: 14px; color: #f39c12; margin-bottom: 8px;">📍 Nadpis Margin Bottom</div>
-            <input type="range" id="titleMarginBottom" min="0" max="100" value="20" style="width: 100%; margin-bottom: 5px;">
-            <div style="font-size: 22px; color: #f39c12; font-weight: bold;"><span id="titleMarginBottomValue">20</span>px</div>
-        </div>
-        
-        <!-- Dots Margin -->
-        <div style="text-align: center; margin-bottom: 12px;">
-            <div style="font-weight: bold; font-size: 14px; color: #4CAF50; margin-bottom: 8px;">⚫ Bodky Margin Top</div>
-            <input type="range" id="dotsMarginTop" min="0" max="100" value="25" style="width: 100%; margin-bottom: 5px;">
-            <div style="font-size: 22px; color: #4CAF50; font-weight: bold;"><span id="dotsMarginTopValue">25</span>px</div>
-        </div>
-        
-        <div style="display: flex; gap: 8px;">
-            <button onclick="closePositionControl()" style="flex: 1; padding: 8px; background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer;">Close</button>
-        </div>
-    </div>
-
-    <!-- REOPEN BUTTON - MOBILE ONLY -->
-    <button id="reopenBtn" onclick="reopenPositionControl()" style="display: none; position: fixed; bottom: 20px; right: 20px; background: rgba(243, 156, 18, 0.9); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 9999; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.5);">🎯</button>
-
     <!-- Header -->
     <header>
         <div class="header-content">
@@ -1590,57 +1589,6 @@
     </footer>
 
     <script>
-        // Dual Position Control System - Title & Dots - Mobile Only
-        const isMobileDevice = window.innerWidth <= 768;
-        
-        if (isMobileDevice) {
-            // Show control panel and reopen button on load
-            document.getElementById('positionControl').style.display = 'block';
-            document.getElementById('reopenBtn').style.display = 'block';
-            
-            // Get elements
-            const sectionTitle = document.querySelector('.section-title');
-            const dotsContainer = document.getElementById('carouselDots');
-            
-            // Get sliders
-            const titleMarginBottomSlider = document.getElementById('titleMarginBottom');
-            const dotsMarginTopSlider = document.getElementById('dotsMarginTop');
-            
-            // Get value displays
-            const titleMarginBottomValue = document.getElementById('titleMarginBottomValue');
-            const dotsMarginTopValue = document.getElementById('dotsMarginTopValue');
-            
-            // Update function for title
-            function updateTitlePosition() {
-                const marginBottom = titleMarginBottomSlider.value;
-                sectionTitle.style.marginBottom = marginBottom + 'px';
-                titleMarginBottomValue.textContent = marginBottom;
-            }
-            
-            // Update function for dots
-            function updateDotsPosition() {
-                const marginTop = dotsMarginTopSlider.value;
-                dotsContainer.style.marginTop = marginTop + 'px';
-                dotsMarginTopValue.textContent = marginTop;
-            }
-            
-            // Add event listeners
-            titleMarginBottomSlider.addEventListener('input', updateTitlePosition);
-            dotsMarginTopSlider.addEventListener('input', updateDotsPosition);
-            
-            // Initialize both
-            updateTitlePosition();
-            updateDotsPosition();
-        }
-        
-        function closePositionControl() {
-            document.getElementById('positionControl').style.display = 'none';
-        }
-        
-        function reopenPositionControl() {
-            document.getElementById('positionControl').style.display = 'block';
-        }
-
         let currentSlide = 0;
         const cards = document.querySelectorAll('.service-card');
         const totalSlides = cards.length;
@@ -1928,37 +1876,41 @@
             stopAutoAdvance(); // Stop auto-advance on manual navigation
         }
 
-        // Auto-advance carousel - with user interaction detection
-        let autoAdvance = setInterval(nextSlide, 5000);
+        // Auto-advance carousel - STARTS AFTER AUTO-SCROLL, DISABLED PERMANENTLY ON USER INPUT
+        let autoAdvance = null; // Start as null
         let userHasInteracted = false;
 
-        // Function to stop auto-advance on user interaction
-        function stopAutoAdvance() {
-            if (!userHasInteracted) {
-                userHasInteracted = true;
-                clearInterval(autoAdvance);
+        // Function to start auto-advance (called after auto-scroll completes)
+        function startAutoAdvance() {
+            if (!userHasInteracted && autoAdvance === null) {
+                autoAdvance = setInterval(nextSlide, 5000); // 5 seconds between slides
             }
         }
 
-        // Detect any user interaction
+        // Function to stop auto-advance PERMANENTLY on user interaction
+        function stopAutoAdvance() {
+            if (!userHasInteracted) {
+                userHasInteracted = true;
+                if (autoAdvance !== null) {
+                    clearInterval(autoAdvance);
+                    autoAdvance = null;
+                }
+            }
+        }
+
+        // Detect any user interaction - disable auto-advance PERMANENTLY
         window.addEventListener('wheel', stopAutoAdvance, { passive: true, once: true });
         window.addEventListener('touchstart', stopAutoAdvance, { passive: true, once: true });
         window.addEventListener('click', stopAutoAdvance, { once: true });
         window.addEventListener('keydown', stopAutoAdvance, { once: true });
         window.addEventListener('scroll', stopAutoAdvance, { passive: true, once: true });
 
-        // Pause auto-advance on hover (if not already stopped)
-        document.querySelector('.services-carousel').addEventListener('mouseenter', () => {
+        // Start auto-advance 4 seconds after page load (after auto-scroll has time to complete)
+        setTimeout(() => {
             if (!userHasInteracted) {
-                clearInterval(autoAdvance);
+                startAutoAdvance();
             }
-        });
-
-        document.querySelector('.services-carousel').addEventListener('mouseleave', () => {
-            if (!userHasInteracted) {
-                autoAdvance = setInterval(nextSlide, 5000);
-            }
-        });
+        }, 4000); // Wait 4 seconds (2s before auto-scroll + 1s scroll + 1s buffer)
 
         // Language switcher
         function switchLanguage(lang) {
