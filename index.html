@@ -1029,10 +1029,10 @@
 
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 20px; /* More space between title and cards */
+                margin-bottom: 20px;
                 padding: 0 10px;
                 position: relative;
-                z-index: 5; /* Keep title below cards */
+                z-index: 5;
             }
 
             /* FIX 3: Service cards VIDITEĽNÉ a zmestené na screen */
@@ -1296,21 +1296,6 @@
     </style>
 </head>
 <body>
-    <!-- COMPACT POSITION CONTROL - MOBILE ONLY -->
-    <div id="positionControl" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); color: white; padding: 15px 20px; border-radius: 12px; z-index: 10000; min-width: 280px; box-shadow: 0 8px 30px rgba(0,0,0,0.6);">
-        <div style="text-align: center; margin-bottom: 12px;">
-            <div style="font-weight: bold; font-size: 14px; color: #f39c12; margin-bottom: 8px;">📍 Margin Bottom</div>
-            <input type="range" id="titleMarginBottom" min="-50" max="50" value="20" style="width: 100%; margin-bottom: 5px;">
-            <div style="font-size: 22px; color: #f39c12; font-weight: bold;"><span id="titleMarginBottomValue">20</span>px</div>
-        </div>
-        <div style="display: flex; gap: 8px;">
-            <button onclick="closePositionControl()" style="flex: 1; padding: 8px; background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer;">Close</button>
-        </div>
-    </div>
-
-    <!-- REOPEN BUTTON - MOBILE ONLY -->
-    <button id="reopenBtn" onclick="reopenPositionControl()" style="display: none; position: fixed; bottom: 20px; right: 20px; background: rgba(243, 156, 18, 0.9); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 9999; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.5);">🎯</button>
-
     <!-- Header -->
     <header>
         <div class="header-content">
@@ -1581,45 +1566,6 @@
     </footer>
 
     <script>
-        // Position Control System - ONLY for Title - Mobile Only
-        const isMobileDevice = window.innerWidth <= 768;
-        
-        if (isMobileDevice) {
-            // Show control panel and reopen button on load
-            document.getElementById('positionControl').style.display = 'block';
-            document.getElementById('reopenBtn').style.display = 'block';
-            
-            // Get title element
-            const sectionTitle = document.querySelector('.section-title');
-            
-            // Get slider
-            const titleMarginBottomSlider = document.getElementById('titleMarginBottom');
-            
-            // Get value display
-            const titleMarginBottomValue = document.getElementById('titleMarginBottomValue');
-            
-            // Update function
-            function updateTitlePosition() {
-                const marginBottom = titleMarginBottomSlider.value;
-                sectionTitle.style.marginBottom = marginBottom + 'px';
-                titleMarginBottomValue.textContent = marginBottom;
-            }
-            
-            // Add event listener
-            titleMarginBottomSlider.addEventListener('input', updateTitlePosition);
-            
-            // Initialize
-            updateTitlePosition();
-        }
-        
-        function closePositionControl() {
-            document.getElementById('positionControl').style.display = 'none';
-        }
-        
-        function reopenPositionControl() {
-            document.getElementById('positionControl').style.display = 'block';
-        }
-
         let currentSlide = 0;
         const cards = document.querySelectorAll('.service-card');
         const totalSlides = cards.length;
@@ -1877,6 +1823,16 @@
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSlide);
             });
+
+            // Hide dots on first card (index 0), show on all others - MOBILE ONLY
+            if (isMobile) {
+                const dotsContainer = document.getElementById('carouselDots');
+                if (currentSlide === 0) {
+                    dotsContainer.style.display = 'none';
+                } else {
+                    dotsContainer.style.display = 'flex';
+                }
+            }
 
             // Faster transition for mobile, original for desktop
             const transitionTime = isMobile ? 350 : 700; // 350ms for mobile, 700ms for desktop
