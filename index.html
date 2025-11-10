@@ -1296,13 +1296,22 @@
     </style>
 </head>
 <body>
-    <!-- COMPACT POSITION CONTROL - MOBILE ONLY -->
-    <div id="positionControl" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); color: white; padding: 15px 20px; border-radius: 12px; z-index: 10000; min-width: 280px; box-shadow: 0 8px 30px rgba(0,0,0,0.6);">
-        <div style="text-align: center; margin-bottom: 12px;">
-            <div style="font-weight: bold; font-size: 14px; color: #f39c12; margin-bottom: 8px;">📍 Margin Bottom (posun nižšie = väčšie číslo)</div>
+    <!-- DUAL POSITION CONTROL - MOBILE ONLY -->
+    <div id="positionControl" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); color: white; padding: 15px 20px; border-radius: 12px; z-index: 10000; min-width: 300px; box-shadow: 0 8px 30px rgba(0,0,0,0.6);">
+        <!-- Title Margin -->
+        <div style="text-align: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2);">
+            <div style="font-weight: bold; font-size: 14px; color: #f39c12; margin-bottom: 8px;">📍 Nadpis Margin Bottom</div>
             <input type="range" id="titleMarginBottom" min="0" max="100" value="20" style="width: 100%; margin-bottom: 5px;">
             <div style="font-size: 22px; color: #f39c12; font-weight: bold;"><span id="titleMarginBottomValue">20</span>px</div>
         </div>
+        
+        <!-- Dots Margin -->
+        <div style="text-align: center; margin-bottom: 12px;">
+            <div style="font-weight: bold; font-size: 14px; color: #4CAF50; margin-bottom: 8px;">⚫ Bodky Margin Top</div>
+            <input type="range" id="dotsMarginTop" min="0" max="100" value="25" style="width: 100%; margin-bottom: 5px;">
+            <div style="font-size: 22px; color: #4CAF50; font-weight: bold;"><span id="dotsMarginTopValue">25</span>px</div>
+        </div>
+        
         <div style="display: flex; gap: 8px;">
             <button onclick="closePositionControl()" style="flex: 1; padding: 8px; background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer;">Close</button>
         </div>
@@ -1581,7 +1590,7 @@
     </footer>
 
     <script>
-        // Position Control System - ONLY for Title - Mobile Only
+        // Dual Position Control System - Title & Dots - Mobile Only
         const isMobileDevice = window.innerWidth <= 768;
         
         if (isMobileDevice) {
@@ -1589,27 +1598,39 @@
             document.getElementById('positionControl').style.display = 'block';
             document.getElementById('reopenBtn').style.display = 'block';
             
-            // Get title element
+            // Get elements
             const sectionTitle = document.querySelector('.section-title');
+            const dotsContainer = document.getElementById('carouselDots');
             
-            // Get slider
+            // Get sliders
             const titleMarginBottomSlider = document.getElementById('titleMarginBottom');
+            const dotsMarginTopSlider = document.getElementById('dotsMarginTop');
             
-            // Get value display
+            // Get value displays
             const titleMarginBottomValue = document.getElementById('titleMarginBottomValue');
+            const dotsMarginTopValue = document.getElementById('dotsMarginTopValue');
             
-            // Update function
+            // Update function for title
             function updateTitlePosition() {
                 const marginBottom = titleMarginBottomSlider.value;
                 sectionTitle.style.marginBottom = marginBottom + 'px';
                 titleMarginBottomValue.textContent = marginBottom;
             }
             
-            // Add event listener
-            titleMarginBottomSlider.addEventListener('input', updateTitlePosition);
+            // Update function for dots
+            function updateDotsPosition() {
+                const marginTop = dotsMarginTopSlider.value;
+                dotsContainer.style.marginTop = marginTop + 'px';
+                dotsMarginTopValue.textContent = marginTop;
+            }
             
-            // Initialize
+            // Add event listeners
+            titleMarginBottomSlider.addEventListener('input', updateTitlePosition);
+            dotsMarginTopSlider.addEventListener('input', updateDotsPosition);
+            
+            // Initialize both
             updateTitlePosition();
+            updateDotsPosition();
         }
         
         function closePositionControl() {
@@ -1877,16 +1898,6 @@
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSlide);
             });
-
-            // Hide dots on first card (index 0), show on all others - MOBILE ONLY
-            if (isMobile) {
-                const dotsContainer = document.getElementById('carouselDots');
-                if (currentSlide === 0) {
-                    dotsContainer.style.display = 'none';
-                } else {
-                    dotsContainer.style.display = 'flex';
-                }
-            }
 
             // Faster transition for mobile, original for desktop
             const transitionTime = isMobile ? 350 : 700; // 350ms for mobile, 700ms for desktop
