@@ -952,15 +952,15 @@
                 touch-action: pan-y;
             }
 
-            /* BACKGROUND LOGO - TRULY FIXED, NO MOVEMENT OR JITTER */
+            /* BACKGROUND LOGO - TRULY FIXED POSITION, STAYS IN PLACE WHILE PAGE SCROLLS */
             body::before {
                 background-size: 95%;
                 background-position: center center;
                 background-attachment: fixed;
                 position: fixed;
                 top: 120px;
-                left: 0;
-                right: 0;
+                left: 50%;
+                transform: translate3d(-50%, 0, 0);
                 width: 100vw;
                 height: 100vh;
                 pointer-events: none;
@@ -968,6 +968,7 @@
                 will-change: transform;
                 backface-visibility: hidden;
                 -webkit-backface-visibility: hidden;
+                -webkit-transform: translate3d(-50%, 0, 0);
             }
 
             .services-carousel-wrapper,
@@ -1650,7 +1651,7 @@
             window.addEventListener('touchstart', markUserActivity, { passive: true, once: true });
             window.addEventListener('keydown', markUserActivity, { once: true });
             window.addEventListener('mousedown', markUserActivity, { once: true });
-            // NOTE: No scroll listener here - it would trigger during auto-scroll
+            // NOTE: NO scroll listener - would trigger during auto-scroll and prevent auto-swipe
             
             // Wait 2 seconds, then check if user was active
             setTimeout(() => {
@@ -1843,11 +1844,19 @@
         }
 
         // Update carousel view
-        function updateCarousel() {
+        function updateCarousel(isAutomatic = false) {
             // Nastavíme flag že prebieha transakcia
             isTransitioning = true;
             
+            // Adjust transition speed based on automatic vs manual
+            const transitionDuration = isAutomatic ? 
+                (isMobile ? '0.8s' : '1.4s') : // Slower for auto-swipe
+                (isMobile ? '0.35s' : '0.7s'); // Normal for manual
+            
             cards.forEach((card, index) => {
+                // Set transition speed
+                card.style.transition = `all ${transitionDuration} cubic-bezier(0.4, 0, 0.2, 1)`;
+                
                 // Remove all classes
                 card.classList.remove('center', 'left', 'right', 'far-left', 'far-right', 'hidden');
                 
@@ -1883,8 +1892,14 @@
                 dot.classList.toggle('active', index === currentSlide);
             });
 
-            // Faster transition for mobile, original for desktop
-            const transitionTime = isMobile ? 350 : 700; // 350ms for mobile, 700ms for desktop
+            // Calculate timeout based on transition duration
+            let transitionTime;
+            if (isAutomatic) {
+                transitionTime = isMobile ? 800 : 1400; // Match slower transitions
+            } else {
+                transitionTime = isMobile ? 350 : 700; // Match normal transitions
+            }
+            
             setTimeout(() => {
                 isTransitioning = false;
             }, transitionTime);
@@ -1894,21 +1909,21 @@
         function nextSlide() {
             if (isTransitioning) return;
             currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
+            updateCarousel(false); // false = manual, faster transition
             stopAutoAdvance(); // Stop auto-advance on manual navigation
         }
 
         function prevSlide() {
             if (isTransitioning) return;
             currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateCarousel();
+            updateCarousel(false); // false = manual, faster transition
             stopAutoAdvance(); // Stop auto-advance on manual navigation
         }
 
         function goToSlide(index) {
             if (isTransitioning) return;
             currentSlide = index;
-            updateCarousel();
+            updateCarousel(false); // false = manual, faster transition
             stopAutoAdvance(); // Stop auto-advance on manual navigation
         }
 
@@ -1916,10 +1931,17 @@
         let autoAdvance = null; // Start as null
         let userHasInteracted = false;
 
+        // Function to advance automatically (called by interval)
+        function autoAdvanceSlide() {
+            if (isTransitioning) return;
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel(true); // true = automatic, slower transition
+        }
+
         // Function to start auto-advance (called after auto-scroll completes)
         function startAutoAdvance() {
             if (!userHasInteracted && autoAdvance === null) {
-                autoAdvance = setInterval(nextSlide, 3000); // 3 seconds between slides - faster to show it's interactive
+                autoAdvance = setInterval(autoAdvanceSlide, 4000); // 4 seconds between slides - allows slow transition to complete
             }
         }
 
