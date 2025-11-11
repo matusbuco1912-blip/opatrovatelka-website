@@ -937,7 +937,7 @@
                 overflow-x: hidden !important;
                 overflow-y: auto !important;
                 max-width: 100vw !important;
-                overscroll-behavior: none !important; /* Completely disable overscroll */
+                overscroll-behavior: none !important;
                 -webkit-overscroll-behavior: none !important;
             }
             
@@ -946,22 +946,22 @@
                 overflow-y: auto !important;
                 max-width: 100vw !important;
                 position: relative;
-                overscroll-behavior: none !important; /* Completely disable overscroll */
+                overscroll-behavior: none !important;
                 -webkit-overscroll-behavior: none !important;
                 -webkit-overflow-scrolling: touch;
-                touch-action: pan-y; /* Allow only vertical panning */
+                touch-action: pan-y;
             }
 
-            /* BACKGROUND LOGO - FIXED, CENTERED TO DEVICE, LARGER */
+            /* BACKGROUND LOGO - HIGHER, LARGER, STATIC */
             body::before {
-                background-size: 80%; /* Increased from 65% - larger */
-                background-position: center center; /* Centered to physical device */
-                background-attachment: fixed; /* Fixed position - no movement during scroll */
-                position: fixed; /* Ensure it's truly fixed */
+                background-size: 95%;
+                background-position: center 25%;
+                background-attachment: fixed;
+                position: fixed;
                 top: 0;
                 left: 0;
-                width: 100vw; /* Full viewport width */
-                height: 100vh; /* Full viewport height */
+                width: 100vw;
+                height: 100vh;
             }
 
             .services-carousel-wrapper,
@@ -1029,12 +1029,12 @@
             }
 
             .services {
-                padding: 15px 0 40px 0; /* Top padding for services section */
+                padding: 15px 0 40px 0;
             }
 
             .section-title {
                 font-size: 1.8em;
-                margin-bottom: 35px; /* FIXED: User specified value */
+                margin-bottom: 35px;
                 padding: 0 10px;
                 position: relative;
                 z-index: 5;
@@ -1042,15 +1042,15 @@
 
             /* FIX 3: Service cards VIDITEĽNÉ a zmestené na screen */
             .services-carousel {
-                min-height: 68vh; /* Adjusted height */
+                min-height: 68vh;
                 overflow: visible !important;
-                padding-top: 60px; /* More space to avoid title overlap */
-                margin-top: 0; /* Reset margin */
+                padding-top: 60px;
+                margin-top: 0;
             }
 
             .services-carousel-wrapper {
                 overflow: visible !important;
-                padding-bottom: 80px; /* More space for dots */
+                padding-bottom: 80px;
             }
 
             .carousel-track {
@@ -1058,23 +1058,23 @@
             }
 
             .service-card {
-                width: 88vw; /* Slightly narrower */
-                max-width: 330px; /* Reduced from 340px */
-                min-height: 58vh; /* Reduced height to make room for dots */
-                padding: 14px; /* Slightly less padding */
+                width: 88vw;
+                max-width: 330px;
+                min-height: 58vh;
+                padding: 14px;
                 position: absolute !important;
-                margin-bottom: 50px; /* Space for dots */
-                transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important; /* 350ms transition */
+                margin-bottom: 50px;
+                transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
             }
 
             .service-card h3 {
-                font-size: 1em; /* Slightly smaller */
-                min-height: 38px; /* Reduced height */
-                padding: 4px; /* Less padding */
+                font-size: 1em;
+                min-height: 38px;
+                padding: 4px;
             }
 
             .service-card p {
-                font-size: 0.82em; /* Smaller text */
+                font-size: 0.82em;
                 margin-bottom: 4px;
             }
 
@@ -1084,57 +1084,57 @@
             }
 
             .service-card ul li {
-                font-size: 0.78em; /* Smaller list items */
-                margin: 4px 0; /* Less margin */
+                font-size: 0.78em;
+                margin: 4px 0;
                 padding-left: 18px;
                 line-height: 1.3;
             }
 
             .service-contact {
-                min-height: 70px; /* Reduced from 80px */
-                padding: 8px; /* Less padding */
+                min-height: 70px;
+                padding: 8px;
             }
 
             .service-contact strong {
-                font-size: 0.82em; /* Smaller */
+                font-size: 0.82em;
             }
 
             .service-contact p {
-                font-size: 0.75em; /* Smaller */
+                font-size: 0.75em;
             }
 
             .service-buttons {
                 min-height: auto;
-                gap: 4px; /* Smaller gap */
-                margin-bottom: 5px; /* Add margin bottom */
+                gap: 4px;
+                margin-bottom: 5px;
             }
 
             .service-btn {
-                font-size: 0.72em; /* Even smaller buttons */
-                padding: 6px 8px; /* Less padding */
+                font-size: 0.72em;
+                padding: 6px 8px;
             }
 
             /* PHOTO GALLERY FIXES */
             .service-gallery {
-                height: 130px; /* Base height */
+                height: 130px;
                 overflow: hidden;
             }
 
             /* First card (ZOS SLNKO) - center photo vertically */
             .service-card:nth-child(1) .service-gallery-item img {
-                object-position: center center !important; /* Centered to show equal top/bottom */
+                object-position: center center !important;
             }
 
             /* Second card (ZOS Ambulantná) and Fourth card (For Hendicap) - bigger gallery */
             .service-card:nth-child(2) .service-gallery,
             .service-card:nth-child(4) .service-gallery {
-                height: 180px; /* Increased from 130px to show more photo */
+                height: 180px;
             }
 
             /* Maintain spacing for buttons after larger galleries */
             .service-card:nth-child(2) .service-buttons,
             .service-card:nth-child(4) .service-buttons {
-                margin-top: 8px; /* Keep consistent spacing */
+                margin-top: 8px;
             }
 
             /* FIX: Photos fill entire gallery area on mobile with better positioning */
@@ -1149,8 +1149,8 @@
                 position: relative;
                 width: 100%;
                 height: 100%;
-                object-fit: cover; /* Cover to fill space */
-                object-position: center top; /* Show top part of image by default */
+                object-fit: cover;
+                object-position: center top;
             }
 
             .gallery-placeholder {
@@ -1196,7 +1196,7 @@
             /* DOTS POSITION - FIXED VALUE */
             .carousel-dots {
                 gap: 9px;
-                margin-top: 81px; /* FIXED: User specified value */
+                margin-top: 81px;
                 position: relative;
                 z-index: 15;
                 padding-bottom: 10px;
@@ -1584,7 +1584,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2024 Opatrovateľka.no - <span data-sk="Všetky práva vyhradené" data-en="All rights reserved" data-de="Alle Rechte vorbehalten">Všetky práva vyhradené</span></p>
+            <p>&copy; 2025 Opatrovateľka-no.sk - <span data-sk="Všetky práva vyhradené" data-en="All rights reserved" data-de="Alle Rechte vorbehalten">Všetky práva vyhradené</span></p>
         </div>
     </footer>
 
