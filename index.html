@@ -952,18 +952,19 @@
                 touch-action: pan-y;
             }
 
-            /* BACKGROUND LOGO - HARD-CODED STATIC POSITION, NO MOVEMENT */
+            /* BACKGROUND LOGO - TRULY FIXED POSITION, STAYS IN PLACE WHILE PAGE SCROLLS */
             body::before {
                 background-size: 95%;
                 background-position: center center;
-                background-attachment: scroll;
-                position: absolute;
-                top: 50px;
+                background-attachment: fixed;
+                position: fixed;
+                top: 120px;
                 left: 50%;
                 transform: translateX(-50%);
                 width: 100vw;
                 height: 100vh;
                 pointer-events: none;
+                z-index: -1;
             }
 
             .services-carousel-wrapper,
@@ -1795,13 +1796,13 @@
                     window.removeEventListener('keydown', cancelScroll);
                     window.removeEventListener('mousedown', cancelScroll);
                     
-                    // CRITICAL: Start auto-swipe AFTER scroll completes, if user hasn't interacted
+                    // CRITICAL: Start auto-swipe IMMEDIATELY after scroll completes, if user hasn't interacted
                     if (!canceled && !userHasInteracted) {
                         setTimeout(() => {
                             if (!userHasInteracted) {
                                 startAutoAdvance();
                             }
-                        }, 500); // Wait 0.5s after scroll completes, then start auto-swipe
+                        }, 100); // Wait just 0.1s after scroll completes, then start auto-swipe immediately
                     }
                 }
             }
@@ -1904,7 +1905,7 @@
         // Function to start auto-advance (called after auto-scroll completes)
         function startAutoAdvance() {
             if (!userHasInteracted && autoAdvance === null) {
-                autoAdvance = setInterval(nextSlide, 5000); // 5 seconds between slides
+                autoAdvance = setInterval(nextSlide, 3000); // 3 seconds between slides - faster to show it's interactive
             }
         }
 
