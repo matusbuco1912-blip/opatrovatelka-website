@@ -952,16 +952,18 @@
                 touch-action: pan-y;
             }
 
-            /* BACKGROUND LOGO - HIGHER, LARGER, STATIC */
+            /* BACKGROUND LOGO - HARD-CODED STATIC POSITION, NO MOVEMENT */
             body::before {
                 background-size: 95%;
-                background-position: center 25%;
-                background-attachment: fixed;
-                position: fixed;
-                top: 0;
-                left: 0;
+                background-position: center center;
+                background-attachment: scroll;
+                position: absolute;
+                top: 50px;
+                left: 50%;
+                transform: translateX(-50%);
                 width: 100vw;
                 height: 100vh;
+                pointer-events: none;
             }
 
             .services-carousel-wrapper,
@@ -1663,6 +1665,10 @@
         // Handle drag/swipe start
         function handleDragStart(e) {
             if (isTransitioning) return;
+            
+            // CRITICAL: Stop auto-advance on any drag/swipe
+            stopAutoAdvance();
+            
             isDragging = true;
             isHorizontalSwipe = null;
             startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
@@ -1757,7 +1763,10 @@
 
             // Cancel auto-scroll if user interacts
             function cancelScroll() {
+                if (canceled) return; // Already canceled
                 canceled = true;
+                // Stop auto-advance permanently
+                stopAutoAdvance();
                 // Remove all listeners
                 window.removeEventListener('wheel', cancelScroll);
                 window.removeEventListener('touchstart', cancelScroll);
@@ -1781,7 +1790,19 @@
                     requestAnimationFrame(animation);
                 } else {
                     // Remove listeners after animation completes
-                    cancelScroll();
+                    window.removeEventListener('wheel', cancelScroll);
+                    window.removeEventListener('touchstart', cancelScroll);
+                    window.removeEventListener('keydown', cancelScroll);
+                    window.removeEventListener('mousedown', cancelScroll);
+                    
+                    // CRITICAL: Start auto-swipe AFTER scroll completes, if user hasn't interacted
+                    if (!canceled && !userHasInteracted) {
+                        setTimeout(() => {
+                            if (!userHasInteracted) {
+                                startAutoAdvance();
+                            }
+                        }, 500); // Wait 0.5s after scroll completes, then start auto-swipe
+                    }
                 }
             }
 
@@ -1904,13 +1925,6 @@
         window.addEventListener('click', stopAutoAdvance, { once: true });
         window.addEventListener('keydown', stopAutoAdvance, { once: true });
         window.addEventListener('scroll', stopAutoAdvance, { passive: true, once: true });
-
-        // Start auto-advance 4 seconds after page load (after auto-scroll has time to complete)
-        setTimeout(() => {
-            if (!userHasInteracted) {
-                startAutoAdvance();
-            }
-        }, 4000); // Wait 4 seconds (2s before auto-scroll + 1s scroll + 1s buffer)
 
         // Language switcher
         function switchLanguage(lang) {
