@@ -952,19 +952,22 @@
                 touch-action: pan-y;
             }
 
-            /* BACKGROUND LOGO - TRULY FIXED POSITION, STAYS IN PLACE WHILE PAGE SCROLLS */
+            /* BACKGROUND LOGO - TRULY FIXED, NO MOVEMENT OR JITTER */
             body::before {
                 background-size: 95%;
                 background-position: center center;
                 background-attachment: fixed;
                 position: fixed;
                 top: 120px;
-                left: 50%;
-                transform: translateX(-50%);
+                left: 0;
+                right: 0;
                 width: 100vw;
                 height: 100vh;
                 pointer-events: none;
                 z-index: -1;
+                will-change: transform;
+                backface-visibility: hidden;
+                -webkit-backface-visibility: hidden;
             }
 
             .services-carousel-wrapper,
@@ -1647,7 +1650,7 @@
             window.addEventListener('touchstart', markUserActivity, { passive: true, once: true });
             window.addEventListener('keydown', markUserActivity, { once: true });
             window.addEventListener('mousedown', markUserActivity, { once: true });
-            window.addEventListener('scroll', markUserActivity, { passive: true, once: true });
+            // NOTE: No scroll listener here - it would trigger during auto-scroll
             
             // Wait 2 seconds, then check if user was active
             setTimeout(() => {
@@ -1659,7 +1662,6 @@
                 window.removeEventListener('touchstart', markUserActivity);
                 window.removeEventListener('keydown', markUserActivity);
                 window.removeEventListener('mousedown', markUserActivity);
-                window.removeEventListener('scroll', markUserActivity);
             }, 2000); // Wait 2 seconds so user can see hero
         }
 
@@ -1766,18 +1768,29 @@
             function cancelScroll() {
                 if (canceled) return; // Already canceled
                 canceled = true;
-                // Stop auto-advance permanently
+                // Stop auto-advance permanently when user interrupts auto-scroll
                 stopAutoAdvance();
                 // Remove all listeners
                 window.removeEventListener('wheel', cancelScroll);
                 window.removeEventListener('touchstart', cancelScroll);
                 window.removeEventListener('keydown', cancelScroll);
                 window.removeEventListener('mousedown', cancelScroll);
+                window.removeEventListener('touchmove', cancelScrollOnManualScroll);
+            }
+            
+            // Detect manual scroll/swipe during auto-scroll
+            let manualScrollDetected = false;
+            function cancelScrollOnManualScroll(e) {
+                if (!manualScrollDetected) {
+                    manualScrollDetected = true;
+                    cancelScroll();
+                }
             }
 
             // Add event listeners for user input
             window.addEventListener('wheel', cancelScroll, { passive: true });
             window.addEventListener('touchstart', cancelScroll, { passive: true });
+            window.addEventListener('touchmove', cancelScrollOnManualScroll, { passive: true });
             window.addEventListener('keydown', cancelScroll);
             window.addEventListener('mousedown', cancelScroll);
 
@@ -1793,6 +1806,7 @@
                     // Remove listeners after animation completes
                     window.removeEventListener('wheel', cancelScroll);
                     window.removeEventListener('touchstart', cancelScroll);
+                    window.removeEventListener('touchmove', cancelScrollOnManualScroll);
                     window.removeEventListener('keydown', cancelScroll);
                     window.removeEventListener('mousedown', cancelScroll);
                     
@@ -1921,11 +1935,11 @@
         }
 
         // Detect any user interaction - disable auto-advance PERMANENTLY
+        // NOTE: No scroll listener - it would trigger during auto-scroll and disable auto-swipe
         window.addEventListener('wheel', stopAutoAdvance, { passive: true, once: true });
         window.addEventListener('touchstart', stopAutoAdvance, { passive: true, once: true });
         window.addEventListener('click', stopAutoAdvance, { once: true });
         window.addEventListener('keydown', stopAutoAdvance, { once: true });
-        window.addEventListener('scroll', stopAutoAdvance, { passive: true, once: true });
 
         // Language switcher
         function switchLanguage(lang) {
